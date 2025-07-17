@@ -1,0 +1,42 @@
+# Docker ignore file
+
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+
+# Development files
+.git
+.github
+.vscode
+.idea
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage
+
+# Misc
+.DS_Store
+*.pem
+
+# Documentation
+README.md
+README.docker.md
+DEPLOYMENT_DOCKER.md
+
+# Docker files (they'll be copied separately)
+docker-compose.yml
+
+# Donation service (has its own Dockerfile)
+donation-service

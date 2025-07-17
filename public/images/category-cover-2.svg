@@ -1,0 +1,28 @@
+<svg width="600" height="300" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="catgrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16213E" />
+      <stop offset="100%" stop-color="#0F3460" />
+    </linearGradient>
+    <radialGradient id="catglow2" cx="70%" cy="50%" r="50%" fx="70%" fy="50%">
+      <stop offset="0%" stop-color="#E94560" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#E94560" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="300" fill="url(#catgrad2)" />
+  <circle cx="420" cy="150" r="100" fill="url(#catglow2)" opacity="0.6" />
+  
+  <!-- Music notes -->
+  <path d="M420,100 L440,90 L440,150 C440,160 430,170 420,170 C410,170 400,160 400,150 C400,140 410,130 420,130 L420,100 Z" fill="white" opacity="0.9" />
+  <path d="M380,120 L400,110 L400,170 C400,180 390,190 380,190 C370,190 360,180 360,170 C360,160 370,150 380,150 L380,120 Z" fill="white" opacity="0.7" />
+  
+  <!-- Decorative elements -->
+  <circle cx="200" cy="100" r="20" fill="#E94560" opacity="0.6" />
+  <circle cx="150" cy="150" r="30" fill="#E94560" opacity="0.4" />
+  <circle cx="220" cy="200" r="25" fill="#E94560" opacity="0.5" />
+  
+  <!-- Text placeholder -->
+  <rect x="100" y="120" width="200" height="10" rx="5" fill="white" opacity="0.7" />
+  <rect x="100" y="140" width="150" height="10" rx="5" fill="white" opacity="0.5" />
+  <rect x="100" y="160" width="180" height="10" rx="5" fill="white" opacity="0.5" />
+</svg>
