@@ -9,6 +9,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
 
+# Set environment variable to ignore Prisma checksum issues
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+
 # Install dependencies
 RUN npm ci
 
@@ -28,6 +31,8 @@ ENV NODE_ENV=production
 ENV NEXT_PUBLIC_SKIP_DB_OPERATIONS=true
 # Mock DATABASE_URL for Prisma during build
 ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/oyagema?schema=public
+# Set environment variable to ignore Prisma checksum issues
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 
 # Build the application
 RUN npm run build

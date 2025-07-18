@@ -13,6 +13,8 @@ services:
       - NEXTAUTH_URL=http://88.222.212.111:8996
       - NEXTAUTH_SECRET=oyagema_production_secret_2024_voice_of_heaven
       - DONATION_SERVICE_URL=http://88.222.212.111:5001
+      - PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+      
     volumes:
       - ./public/uploads:/app/public/uploads
     networks:
