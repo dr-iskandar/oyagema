@@ -6,6 +6,22 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting seeding...');
 
+  // Create admin user
+  const adminHashedPassword = await hash('@VoiceofHeav3n', 10);
+  const admin = await prisma.user.upsert({
+    where: { email: 'oyagema@gmail.com' },
+    update: {},
+    create: {
+      name: 'Admin Oyagema',
+      email: 'oyagema@gmail.com',
+      password: adminHashedPassword,
+      role: 'ADMIN',
+      image: '/images/meditation-silhouette.svg',
+    },
+  });
+
+  console.log(`Created admin with id: ${admin.id}`);
+
   // Create a test user
   const hashedPassword = await hash('password123', 10);
   const user = await prisma.user.upsert({
