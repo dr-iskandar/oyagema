@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+
+// Removed useRouter import
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiLogOut, FiSettings, FiHeart } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiHeart } from 'react-icons/fi';
 import { useAuth } from '@/lib/hooks/useAuth';
 import DonationModal from '@/components/modals/DonationModal';
 
@@ -13,7 +13,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
-  const router = useRouter();
+  // Removed router variable
 
   const handleLogout = () => {
     logout();

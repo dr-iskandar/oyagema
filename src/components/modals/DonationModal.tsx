@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiHeart, FiCreditCard, FiDollarSign } from 'react-icons/fi';
+import { FiX, FiHeart, FiCreditCard } from 'react-icons/fi';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 type DonationModalProps = {
@@ -15,7 +15,7 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [message, setMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentData, setPaymentData] = useState<any>(null);
+  // Removed paymentData state
   const paymentWindowRef = useRef<Window | null>(null);
   const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { user } = useAuth();
@@ -27,12 +27,7 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
     setAmount(value.toString());
   };
 
-  const handleCustomAmount = (value: string) => {
-    // Only allow numbers
-    const numericValue = value.replace(/[^0-9]/g, '');
-    setAmount(numericValue);
-    setSelectedAmount(null);
-  };
+  // Removed handleCustomAmount function
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -79,8 +74,7 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
         throw new Error(data.message || 'Failed to create donation payment');
       }
 
-      // Store payment data for potential verification
-      setPaymentData(data.data);
+      // Removed setPaymentData call
       
       console.log('Received payment data:', data.data);
       
@@ -96,10 +90,10 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
       if (paymentUrl) {
         // Store current path to localStorage to return after payment
         if (typeof window !== 'undefined') {
-          // Get the current path (playlist page)
-          const currentPath = window.location.pathname;
-          // Store it in localStorage
-          localStorage.setItem('previousPlaylistPath', currentPath);
+          // Get the current path
+    const currentPath = window.location.pathname;
+    // Store the current path in localStorage
+    localStorage.setItem('previousPath', currentPath);
         }
         
         // Open payment window and store reference
@@ -138,7 +132,7 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
       setAmount('');
       setSelectedAmount(null);
       setMessage('');
-      setPaymentData(null);
+      // Removed setPaymentData call
       onClose();
     }
   };

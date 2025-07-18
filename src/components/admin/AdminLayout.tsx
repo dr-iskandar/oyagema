@@ -4,7 +4,7 @@ import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FiHome, FiMusic, FiUsers, FiGrid, FiList, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import { FiHome, FiMusic, FiUsers, FiGrid, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { useAdminAuth } from '@/components/auth/AdminAuthGuard';
 
 type AdminLayoutProps = {
@@ -21,7 +21,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { name: 'Tracks', href: '/admin/tracks', icon: FiMusic },
     { name: 'Categories', href: '/admin/categories', icon: FiGrid },
     { name: 'Users', href: '/admin/users', icon: FiUsers },
-    { name: 'Playlists', href: '/admin/playlists', icon: FiList },
+    // Removed playlists admin link
   ];
 
   const toggleSidebar = () => {

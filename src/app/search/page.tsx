@@ -9,7 +9,37 @@ import CategoryGrid from '@/components/sections/CategoryGrid';
 import { useCategories } from '@/lib/hooks/useCategories';
 import { useTracks } from '@/lib/hooks/useTracks';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
-import { useAuth } from '@/lib/hooks/useAuth';
+
+// Types that match component expectations
+type Track = {
+  id: string;
+  title: string;
+  artist: string;
+  coverUrl: string;
+  audioUrl?: string;
+  duration?: string;
+};
+
+// Use the same Category type as CategoryGrid expects
+type CategoryGridCategory = {
+  id: string;
+  title: string;
+  description?: string;
+  coverUrl: string;
+  href: string;
+};
+
+// API Category type
+type APICategory = {
+  id: string;
+  title: string;
+  description: string | null;
+  coverUrl: string;
+  slug: string;
+  createdAt?: string;
+  updatedAt?: string;
+  tracks?: Track[];
+};
 
 // Mock data for moods (this would typically come from an API)
 const moods = [
@@ -25,20 +55,25 @@ export default function Search() {
   // Get data from API using custom hooks
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
   const { tracks, loading: tracksLoading, error: tracksError } = useTracks();
-  const { user } = useAuth();
   const { playTrack } = useAudioPlayer();
   
   // Local state
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredTracks, setFilteredTracks] = useState<any[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
+  const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<CategoryGridCategory[]>([]);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
 
   // Initialize filtered data when API data is loaded
   useEffect(() => {
     if (tracks && categories) {
       setFilteredTracks(tracks);
-      setFilteredCategories(categories);
+      setFilteredCategories(categories.map((category: APICategory): CategoryGridCategory => ({
+        id: category.id,
+        title: category.title,
+        description: category.description || undefined,
+        coverUrl: category.coverUrl,
+        href: `/category/${category.slug}`
+      })));
     }
   }, [tracks, categories]);
 
@@ -60,15 +95,21 @@ export default function Search() {
           (category) =>
             category.title.toLowerCase().includes(query) ||
             (category.description && category.description.toLowerCase().includes(query))
-        ).map(category => ({
-          ...category,
+        ).map((category: APICategory): CategoryGridCategory => ({
+          id: category.id,
+          title: category.title,
+          description: category.description || undefined,
+          coverUrl: category.coverUrl,
           href: `/category/${category.slug}`
         }))
       );
     } else {
       setFilteredTracks(tracks);
-      setFilteredCategories(categories.map(category => ({
-        ...category,
+      setFilteredCategories(categories.map((category: APICategory): CategoryGridCategory => ({
+        id: category.id,
+        title: category.title,
+        description: category.description || undefined,
+        coverUrl: category.coverUrl,
         href: `/category/${category.slug}`
       })));
     }
@@ -80,7 +121,7 @@ export default function Search() {
     // For now, we'll just keep this as a UI element
   };
 
-  const handleTrackClick = (track: any) => {
+  const handleTrackClick = (track: Track) => {
     playTrack({
       id: track.id,
       title: track.title,
@@ -110,7 +151,7 @@ export default function Search() {
         <div className="flex flex-col items-center justify-center h-[70vh]">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-semibold text-text-primary mb-2">Something went wrong</h2>
-          <p className="text-text-secondary">We couldn't load the content. Please try again later.</p>
+          <p className="text-text-secondary">We couldn&apos;t load the content. Please try again later.</p>
         </div>
       </MainLayout>
     );
@@ -170,8 +211,7 @@ export default function Search() {
           <TrackGrid 
             title="Tracks" 
             tracks={filteredTracks} 
-            onTrackClick={handleTrackClick} 
-            userId={user?.id || ''}
+            onTrackClick={handleTrackClick}
           />
         )}
 

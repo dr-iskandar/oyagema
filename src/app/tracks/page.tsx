@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FiSearch, FiMusic, FiPlay, FiPlus, FiHeart } from 'react-icons/fi';
+import { FiSearch, FiMusic, FiPlay } from 'react-icons/fi';
 import MainLayout from '@/components/layout/MainLayout';
 
 type Category = {
@@ -91,15 +91,7 @@ export default function TracksPage() {
     console.log(`Playing track ${trackId}`);
   };
 
-  const handleAddToPlaylist = (trackId: string) => {
-    // In a real app, this would open a dialog to add the track to a playlist
-    console.log(`Adding track ${trackId} to playlist`);
-  };
-
-  const handleLike = (trackId: string) => {
-    // In a real app, this would add the track to favorites
-    console.log(`Liked track ${trackId}`);
-  };
+  // Removed playlist and favorite functionality
 
   if (isLoading) {
     return (
@@ -227,21 +219,7 @@ export default function TracksPage() {
                           <FiPlay size={18} />
                         </button>
                         
-                        <button
-                          onClick={() => handleAddToPlaylist(track.id)}
-                          className="text-text-secondary hover:text-text-primary transition-colors p-2 rounded-full hover:bg-background-light/20"
-                          aria-label="Add to playlist"
-                        >
-                          <FiPlus size={18} />
-                        </button>
-                        
-                        <button
-                          onClick={() => handleLike(track.id)}
-                          className="text-text-secondary hover:text-red-500 transition-colors p-2 rounded-full hover:bg-background-light/20"
-                          aria-label="Like track"
-                        >
-                          <FiHeart size={18} />
-                        </button>
+                        {/* Add to playlist and favorite buttons removed */}
                       </div>
                     </td>
                   </tr>

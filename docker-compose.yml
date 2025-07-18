@@ -46,7 +46,7 @@ services:
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
     ports:
-      - "5000:5000"
+      - "5001:5000"
     restart: unless-stopped
     networks:
       - oyagema-network

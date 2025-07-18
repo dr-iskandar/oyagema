@@ -1,15 +1,14 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiPlay, FiPause, FiSkipBack, FiSkipForward, FiRepeat, FiShuffle, FiVolume2, FiHeart, FiMusic } from 'react-icons/fi';
+import { FiPlay, FiPause, FiSkipBack, FiSkipForward, FiRepeat, FiShuffle, FiVolume2, FiMusic } from 'react-icons/fi';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
-import { useToggleFavorite, useIsFavorite } from '@/lib/hooks/useFavorites';
-import { useAuth } from '@/lib/hooks/useAuth';
+// Removed favorites functionality
 
 const MusicPlayer = () => {
-  const { user } = useAuth();
+  // Removed user variable
   const {
     currentTrack,
     isPlaying,
@@ -30,10 +29,9 @@ const MusicPlayer = () => {
     toggleRepeat,
   } = useAudioPlayer();
 
-  const userId = user?.id || '';
+  // Removed userId variable
 
-  const { isFavorite, loading: favoriteLoading } = useIsFavorite(userId, currentTrack?.id || '');
-  const { toggleFavorite, loading: toggleLoading } = useToggleFavorite(userId);
+  // Removed favorites functionality
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -67,11 +65,7 @@ const MusicPlayer = () => {
     }
   };
 
-  const handleToggleFavorite = async () => {
-    if (currentTrack?.id && !toggleLoading) {
-      await toggleFavorite(currentTrack.id, isFavorite);
-    }
-  };
+  // Removed favorites functionality
 
   const displayTime = isSeeking ? seekValue : (currentTime || 0);
   const progressValue = isSeeking ? seekValue : (currentTime || 0);
@@ -126,17 +120,7 @@ const MusicPlayer = () => {
                   <h4 className="text-text-primary font-semibold truncate text-lg">{currentTrack.title}</h4>
                   <p className="text-text-secondary text-sm truncate">{currentTrack.artist}</p>
                 </div>
-                <button 
-                  onClick={handleToggleFavorite}
-                  disabled={favoriteLoading || toggleLoading}
-                  className={`p-2 rounded-full transition-all duration-200 ${
-                    isFavorite 
-                      ? 'text-red-500 bg-red-500/10 hover:bg-red-500/20' 
-                      : 'text-text-muted hover:text-red-500 hover:bg-red-500/10'
-                  } ${(favoriteLoading || toggleLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  <FiHeart className={isFavorite ? 'fill-current' : ''} size={18} />
-                </button>
+                {/* Favorite button removed */}
               </div>
 
               {/* Center Controls */}
@@ -339,17 +323,7 @@ const MusicPlayer = () => {
                       </span>
                     )}
                   </button>
-                  <button 
-                    onClick={handleToggleFavorite}
-                    disabled={favoriteLoading || toggleLoading}
-                    className={`p-2 rounded-full transition-all duration-200 ${
-                      isFavorite 
-                        ? 'text-red-500 bg-red-500/10' 
-                        : 'text-text-muted hover:text-red-500 hover:bg-red-500/10'
-                    } ${(favoriteLoading || toggleLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    <FiHeart className={isFavorite ? 'fill-current' : ''} size={16} />
-                  </button>
+                  {/* Favorite button removed */}
                 </div>
               </div>
               

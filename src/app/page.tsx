@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import DailyRecommendation from '@/components/sections/DailyRecommendation';
 import TrackGrid from '@/components/sections/TrackGrid';
@@ -8,7 +7,16 @@ import CategoryGrid from '@/components/sections/CategoryGrid';
 import { useCategories } from '@/lib/hooks/useCategories';
 import { useTracks } from '@/lib/hooks/useTracks';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
-import { useAuth } from '@/lib/hooks/useAuth';
+
+// Track type that matches TrackGrid component expectations
+type Track = {
+  id: string;
+  title: string;
+  artist: string;
+  coverUrl: string;
+  audioUrl?: string;
+  duration?: string;
+};
 
 // Temporary mock data for daily recommendation until we have API endpoint for it
 const dailyRecommendation = {
@@ -25,14 +33,12 @@ export default function Home() {
   // Get data from API using custom hooks
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
   const { tracks, loading: tracksLoading, error: tracksError } = useTracks();
-  const { user } = useAuth();
-  
+
   // Use audio player hook
   const { 
     playTrack, 
     currentTrack, 
-    isPlaying, 
-    togglePlay 
+    isPlaying
   } = useAudioPlayer();
 
   // Filter tracks for different sections
@@ -54,7 +60,7 @@ export default function Home() {
     console.log('After playTrack call for daily recommendation');
   };
 
-  const handleTrackClick = (track: any) => {
+  const handleTrackClick = (track: Track) => {
     console.log('Track clicked:', track);
     const trackToPlay = {
       id: track.id,
@@ -112,7 +118,6 @@ export default function Home() {
           title="Recently Played"
           tracks={recentTracks}
           onTrackClick={handleTrackClick}
-          userId={user?.id || ''}
         />
         
         <CategoryGrid 
@@ -130,7 +135,6 @@ export default function Home() {
           title="Popular Tracks"
           tracks={popularTracks}
           onTrackClick={handleTrackClick}
-          userId={user?.id || ''}
         />
       </div>
     </MainLayout>

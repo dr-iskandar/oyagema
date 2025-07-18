@@ -79,6 +79,7 @@ export async function POST(request: Request) {
 
     // Return success response (excluding password)
     const { password: _, ...userWithoutPassword } = user;
+    void _; // Explicitly mark as intentionally unused
     
     return NextResponse.json({
       message: 'Admin registration successful',

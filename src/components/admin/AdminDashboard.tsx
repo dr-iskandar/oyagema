@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FiUsers, FiMusic, FiGrid, FiList } from 'react-icons/fi';
+import { FiUsers, FiMusic, FiGrid } from 'react-icons/fi';
 import Link from 'next/link';
 
 type StatCardProps = {
@@ -34,7 +34,7 @@ const AdminDashboard = () => {
     users: 0,
     tracks: 0,
     categories: 0,
-    playlists: 0,
+    // Removed playlists count
   });
   const [loading, setLoading] = useState(true);
 
@@ -53,15 +53,13 @@ const AdminDashboard = () => {
         const categoriesRes = await fetch('/api/categories/count');
         const categoriesData = await categoriesRes.json();
         
-        // Fetch playlists count
-        const playlistsRes = await fetch('/api/playlists/count');
-        const playlistsData = await playlistsRes.json();
+        // Removed playlists count fetch
         
         setStats({
           users: usersData.count,
           tracks: tracksData.count,
           categories: categoriesData.count,
-          playlists: playlistsData.count,
+          // Removed playlists count
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -70,7 +68,7 @@ const AdminDashboard = () => {
           users: 42,
           tracks: 128,
           categories: 6,
-          playlists: 24,
+          // Removed playlists fallback
         });
       } finally {
         setLoading(false);
@@ -116,13 +114,7 @@ const AdminDashboard = () => {
           href="/admin/categories" 
           color="bg-green-500"
         />
-        <StatCard 
-          title="Playlists" 
-          value={stats.playlists} 
-          icon={FiList} 
-          href="/admin/playlists" 
-          color="bg-amber-500"
-        />
+        {/* Playlists stat card removed */}
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

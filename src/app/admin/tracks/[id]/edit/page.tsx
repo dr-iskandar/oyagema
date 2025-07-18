@@ -3,7 +3,7 @@
 import { useState, useEffect, FormEvent, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { FiSave, FiArrowLeft, FiMusic, FiPlay, FiImage, FiUpload } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiMusic, FiPlay, FiImage } from 'react-icons/fi';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 import { useDropzone } from 'react-dropzone';
@@ -167,9 +167,9 @@ export default function EditTrackPage({ params }: { params: { id: string } }) {
       setTimeout(() => {
         router.push('/admin/tracks');
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating track:', error);
-      setError(error.message || 'An error occurred while updating the track');
+      setError('An error occurred while updating the track');
     } finally {
       setSubmitting(false);
     }

@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FiUser, FiLock, FiMail } from 'react-icons/fi';
@@ -10,7 +8,6 @@ import PublicRoute from '@/components/auth/PublicRoute';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Login() {
-  const router = useRouter();
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

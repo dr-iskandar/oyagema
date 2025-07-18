@@ -2,9 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiPlay, FiHeart, FiPause } from 'react-icons/fi';
-import { useIsFavorite, useToggleFavorite } from '@/lib/hooks/useFavorites';
-import { useAudioPlayer } from '@/lib/hooks/useAudioPlayer';
+import { FiPlay, FiPause } from 'react-icons/fi';
 
 type TrackCardProps = {
   id: string;
@@ -12,21 +10,10 @@ type TrackCardProps = {
   artist: string;
   coverUrl: string;
   onClick?: () => void;
-  userId?: string; // Optional user ID for favorites functionality
   isPlaying?: boolean; // Whether this track is currently playing
 };
 
-const TrackCard = ({ id, title, artist, coverUrl, onClick, userId, isPlaying = false }: TrackCardProps) => {
-  // Use favorites hooks if userId is provided
-  const { isFavorite } = useIsFavorite(userId || '', id);
-  const { toggleFavorite, loading } = useToggleFavorite(userId || '');
-
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering the card's onClick
-    if (userId && !loading) {
-      await toggleFavorite(id, isFavorite);
-    }
-  };
+const TrackCard = ({ id, title, artist, coverUrl, onClick, isPlaying = false }: TrackCardProps) => {
 
   return (
     <motion.div 
@@ -78,15 +65,7 @@ const TrackCard = ({ id, title, artist, coverUrl, onClick, userId, isPlaying = f
             <h3 className="font-medium text-text-primary truncate text-sm sm:text-base">{title}</h3>
             <p className="text-xs sm:text-sm text-text-secondary truncate">{artist}</p>
           </div>
-          {userId && (
-            <button 
-              className={`p-1 sm:p-2 text-text-muted ${isFavorite ? 'text-accent' : 'hover:text-accent'} transition-colors`}
-              onClick={handleFavoriteClick}
-              disabled={loading}
-            >
-              <FiHeart className="text-sm sm:text-base" />
-            </button>
-          )}
+          {/* Favorite button removed */}
         </div>
       </div>
     </motion.div>

@@ -1,22 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiPlay } from 'react-icons/fi';
+
 import MainLayout from '@/components/layout/MainLayout';
 import TrackGrid from '@/components/sections/TrackGrid';
 import { useCategoryBySlug } from '@/lib/hooks/useCategories';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
-import { useAuth } from '@/lib/hooks/useAuth';
+
+// Define Track type to match TrackGrid expectations
+type TrackGridTrack = {
+  id: string;
+  title: string;
+  artist: string;
+  coverUrl: string;
+  audioUrl?: string;
+  duration?: string;
+};
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const { user } = useAuth();
   const { category, loading, error } = useCategoryBySlug(slug);
   const { playTrack } = useAudioPlayer();
 
-  const handleTrackClick = (track: any) => {
+  const handleTrackClick = (track: TrackGridTrack) => {
     playTrack({
       id: track.id,
       title: track.title,
@@ -92,7 +100,6 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             title="Tracks"
             tracks={category.tracks}
             onTrackClick={handleTrackClick}
-            userId={user?.id || ''}
           />
         ) : (
           <div className="text-center py-12">

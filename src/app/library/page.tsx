@@ -2,56 +2,26 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { FiPlay, FiClock } from 'react-icons/fi';
+import { FiClock } from 'react-icons/fi';
 import MainLayout from '@/components/layout/MainLayout';
-// import { usePlaylists } from '@/lib/hooks/usePlaylists';
-// import { useFavorites } from '@/lib/hooks/useFavorites';
+// Removed favorites and playlists functionality
 import { useHistory } from '@/lib/hooks/useHistory';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 import { useAuth } from '@/lib/hooks/useAuth';
 
-const PlaylistCard = ({ playlist, onPlay }: { playlist: any; onPlay?: () => void }) => {
-  return (
-    <Link href={playlist.href || `/playlist/${playlist.id}`}>
-      <motion.div 
-        className="bg-background-light rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-background-light/80"
-        whileHover={{ y: -5 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      >
-        <div className="relative aspect-square overflow-hidden">
-          <Image 
-            src={playlist.coverUrl || '/images/category-cover-1.svg'} 
-            alt={playlist.title} 
-            fill 
-            className="object-cover transition-transform duration-500 hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <motion.button 
-              className="p-4 rounded-full bg-primary text-white shadow-lg"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => {
-                e.preventDefault();
-                if (onPlay) onPlay();
-              }}
-            >
-              <FiPlay className="text-xl" />
-            </motion.button>
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-medium text-text-primary">{playlist.title}</h3>
-          <p className="text-sm text-text-secondary mb-2">{playlist.description}</p>
-          <p className="text-xs text-text-muted">{playlist.trackCount || (playlist.tracks && playlist.tracks.length) || 0} tracks</p>
-        </div>
-      </motion.div>
-    </Link>
-  );
+type TrackItemType = {
+  id: string;
+  title: string;
+  artist: string;
+  coverUrl: string;
+  audioUrl: string;
+  duration: string;
+  playedAt?: string;
 };
 
-const TrackItem = ({ track, onPlay }: { track: any; onPlay: () => void }) => {
+// Removed PlaylistCard component
+
+const TrackItem = ({ track, onPlay }: { track: TrackItemType; onPlay: () => void }) => {
   return (
     <div 
       className="flex items-center p-3 rounded-lg hover:bg-background-light/50 transition-colors group cursor-pointer"
@@ -82,12 +52,11 @@ export default function Library() {
   const { user } = useAuth();
   
   // Get data from API using custom hooks
-  // const { playlists, loading: playlistsLoading, error: playlistsError } = usePlaylists(user?.id || '');
-  // const { favorites, loading: favoritesLoading, error: favoritesError } = useFavorites(user?.id || '');
+  // Removed favorites and playlists hooks
   const { history, loading: historyLoading, error: historyError } = useHistory(user?.id || '');
   const { playTrack } = useAudioPlayer();
 
-  const handlePlayTrack = (track: any) => {
+  const handlePlayTrack = (track: TrackItemType) => {
     playTrack({
       id: track.id,
       title: track.title,
@@ -98,11 +67,7 @@ export default function Library() {
     });
   };
 
-  const handlePlayPlaylist = (playlist: any) => {
-    if (playlist?.tracks && playlist.tracks.length > 0) {
-      handlePlayTrack(playlist.tracks[0]);
-    }
-  };
+  // Removed playlist play functionality
 
   // Show loading state for the active tab
   const isLoading = (activeTab === 'history' && historyLoading);
@@ -140,11 +105,11 @@ export default function Library() {
             <div className="flex flex-col items-center justify-center py-12">
               <div className="text-red-500 text-5xl mb-4">⚠️</div>
               <h2 className="text-xl font-semibold text-text-primary mb-2">Something went wrong</h2>
-              <p className="text-text-secondary">We couldn't load the content. Please try again later.</p>
+              <p className="text-text-secondary">We couldn&apos;t load the content. Please try again later.</p>
             </div>
           )}
 
-          {/* Playlists and Favorites tabs are hidden */}
+          {/* Playlists and Favorites functionality removed */}
 
           {/* History tab */}
           {activeTab === 'history' && !isLoading && !hasError && (

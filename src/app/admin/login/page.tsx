@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+// Removed unused Image import
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FiUser, FiLock, FiShield } from 'react-icons/fi';

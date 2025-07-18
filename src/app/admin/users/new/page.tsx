@@ -99,10 +99,10 @@ export default function NewUserPage() {
         router.push('/admin/users');
       }, 1500);
       
-    } catch (error: any) {
+    } catch {
       setSubmitMessage({
         type: 'error',
-        message: error.message,
+        message: 'Failed to create user',
       });
     } finally {
       setIsSubmitting(false);

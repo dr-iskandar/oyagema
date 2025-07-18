@@ -17,10 +17,9 @@ type TrackGridProps = {
   title: string;
   tracks: Track[];
   onTrackClick?: (track: Track) => void;
-  userId?: string; // Optional user ID for favorites functionality
 };
 
-const TrackGrid = ({ title, tracks, onTrackClick, userId }: TrackGridProps) => {
+const TrackGrid = ({ title, tracks, onTrackClick }: TrackGridProps) => {
   // Get current playing track to highlight it
   const { currentTrack, isPlaying } = useAudioPlayer();
   const container = {
@@ -70,7 +69,6 @@ const TrackGrid = ({ title, tracks, onTrackClick, userId }: TrackGridProps) => {
                   console.error('No onTrackClick callback provided');
                 }
               }}
-              userId={userId}
               isPlaying={isPlaying && currentTrack?.id === track.id}
             />
           </motion.div>

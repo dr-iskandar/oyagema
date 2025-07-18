@@ -46,6 +46,7 @@ export async function POST(request: Request) {
 
     // Return user data (excluding password)
     const { password: _, ...userWithoutPassword } = user;
+    void _; // Explicitly mark as intentionally unused
     
     console.log('Login successful, returning user data:', userWithoutPassword);
     

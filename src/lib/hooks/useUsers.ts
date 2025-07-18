@@ -110,9 +110,9 @@ export function useCreateUser() {
       const data = await response.json();
       setSuccess(true);
       return data;
-    } catch (err: any) {
-      console.error('Error creating user:', err);
-      setError(err.message || 'Failed to create user. Please try again later.');
+    } catch (error: unknown) {
+       console.error('Error creating user:', error);
+       setError('Failed to create user. Please try again later.');
       return null;
     } finally {
       setLoading(false);
@@ -154,9 +154,9 @@ export function useUpdateUser(id: string) {
       const data = await response.json();
       setSuccess(true);
       return data;
-    } catch (err: any) {
-      console.error(`Error updating user ${id}:`, err);
-      setError(err.message || 'Failed to update user. Please try again later.');
+    } catch (error: unknown) {
+       console.error(`Error updating user ${id}:`, error);
+       setError('Failed to update user. Please try again later.');
       return null;
     } finally {
       setLoading(false);
@@ -188,9 +188,9 @@ export function useDeleteUser() {
       
       setSuccess(true);
       return true;
-    } catch (err: any) {
-      console.error(`Error deleting user ${id}:`, err);
-      setError(err.message || 'Failed to delete user. Please try again later.');
+    } catch (error: unknown) {
+       console.error(`Error deleting user ${id}:`, error);
+       setError('Failed to delete user. Please try again later.');
       return false;
     } finally {
       setLoading(false);

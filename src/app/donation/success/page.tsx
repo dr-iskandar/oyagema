@@ -1,10 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import { FiCheck, FiHeart } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+
+// Loading component for Suspense fallback
+function DonationSuccessLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="bg-background-light rounded-2xl shadow-2xl w-full max-w-md mx-auto overflow-hidden p-8 text-center">
+        <div className="animate-spin h-10 w-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+        <h2 className="text-xl font-semibold">Memproses Donasi...</h2>
+        <p className="text-text-secondary mt-2">Mohon tunggu sebentar</p>
+      </div>
+    </div>
+  );
+}
 
 export default function DonationSuccessPage() {
   const searchParams = useSearchParams();
@@ -55,13 +68,14 @@ export default function DonationSuccessPage() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-background-light rounded-2xl shadow-2xl w-full max-w-md mx-auto overflow-hidden"
-        >
+      <Suspense fallback={<DonationSuccessLoading />}>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-background-light rounded-2xl shadow-2xl w-full max-w-md mx-auto overflow-hidden"
+          >
           {/* Header */}
           <div className="bg-gradient-to-r from-accent to-primary p-6 text-white">
             <div className="flex items-center space-x-3">
@@ -99,8 +113,9 @@ export default function DonationSuccessPage() {
               </button>
             </div>
           </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      </Suspense>
     </MainLayout>
   );
 }

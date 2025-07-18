@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiClock, FiPlay, FiCalendar } from 'react-icons/fi';
@@ -9,8 +8,23 @@ import { useHistory } from '@/lib/hooks/useHistory';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 import { useAuth } from '@/lib/hooks/useAuth';
 
-const HistoryItem = ({ item, onPlay }: { 
-  item: any; 
+type HistoryItem = {
+  id: string;
+  userId: string;
+  trackId: string;
+  playedAt: string;
+  track: {
+    id: string;
+    title: string;
+    artist: string;
+    coverUrl: string;
+    audioUrl: string;
+    duration: string;
+  };
+};
+
+const HistoryItemComponent = ({ item, onPlay }: { 
+  item: HistoryItem; 
   onPlay: () => void;
 }) => {
   return (
@@ -50,7 +64,7 @@ export default function HistoryPage() {
   const { history, loading, error } = useHistory(user?.id || '');
   const { playTrack } = useAudioPlayer();
 
-  const handlePlayTrack = (track: any) => {
+  const handlePlayTrack = (track: HistoryItem['track']) => {
     if (!track || !track.id) {
       console.error('Invalid track data:', track);
       return;
@@ -67,14 +81,14 @@ export default function HistoryPage() {
   };
 
   // Group history by date
-  const groupedHistory = history?.reduce((groups: any, item: any) => {
+  const groupedHistory = history?.reduce((groups: Record<string, HistoryItem[]>, item: HistoryItem) => {
     const date = new Date(item.playedAt).toLocaleDateString();
     if (!groups[date]) {
       groups[date] = [];
     }
     groups[date].push(item);
     return groups;
-  }, {}) || {};
+  }, {} as Record<string, HistoryItem[]>) || {};
 
   // Show loading state
   if (loading) {
@@ -124,7 +138,7 @@ export default function HistoryPage() {
 
           {history && history.length > 0 ? (
             <div className="space-y-6">
-              {Object.entries(groupedHistory).map(([date, items]: [string, any]) => (
+              {Object.entries(groupedHistory).map(([date, items]: [string, HistoryItem[]]) => (
                 <motion.div 
                   key={date}
                   className="space-y-2"
@@ -134,8 +148,8 @@ export default function HistoryPage() {
                 >
                   <h3 className="text-xl font-semibold text-text-primary">{date}</h3>
                   <div className="bg-background-light/10 rounded-xl p-4 space-y-2">
-                    {items.map((item: any) => (
-                      <HistoryItem 
+                    {items.map((item: HistoryItem) => (
+                      <HistoryItemComponent 
                         key={item.id} 
                         item={item} 
                         onPlay={() => handlePlayTrack(item.track)}

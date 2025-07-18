@@ -2,7 +2,7 @@
 
 import { useState, useEffect, FormEvent, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { FiSave, FiArrowLeft, FiUpload, FiMusic, FiImage } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiMusic, FiImage } from 'react-icons/fi';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useDropzone } from 'react-dropzone';
 import jsmediatags from 'jsmediatags-web';
@@ -143,7 +143,7 @@ export default function NewTrackPage() {
     } else {
       setError('Error: Format file tidak valid. Silakan unggah file MP3.');
     }
-  }, [formData.artist]);
+  }, [formData.artist, extractMetadata]);
   
   // Setup dropzone for cover image upload
   const onDropCover = useCallback((acceptedFiles: File[]) => {
@@ -283,9 +283,9 @@ export default function NewTrackPage() {
       setTimeout(() => {
         router.push('/admin/tracks');
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating track:', error);
-      setError(`Error: ${error.message || 'Terjadi kesalahan saat membuat track. Silakan coba lagi.'}`);
+      setError('Error: Terjadi kesalahan saat membuat track. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -339,8 +339,8 @@ export default function NewTrackPage() {
                   <p className="text-primary font-medium">Drop the audio file here...</p>
                 ) : (
                   <>
-                    <p className="mb-2 font-medium">Drag & drop an MP3 file here, or click to select</p>
-                    <p className="text-sm text-text-secondary">The file's metadata will be automatically extracted</p>
+                    <p className="mb-2 font-medium">Drag &amp; drop an MP3 file here, or click to select</p>
+                    <p className="text-sm text-text-secondary">The file&apos;s metadata will be automatically extracted</p>
                   </>
                 )}
               </div>
@@ -379,7 +379,7 @@ export default function NewTrackPage() {
 
             <div className="space-y-2">
               <label htmlFor="artist" className="block text-sm font-medium text-text-secondary">
-                Artist * <span className="text-xs text-text-secondary">(defaults to "Oyagema" if empty)</span>
+                Artist * <span className="text-xs text-text-secondary">(defaults to &quot;Oyagema&quot; if empty)</span>
               </label>
               <input
                 type="text"

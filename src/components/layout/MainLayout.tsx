@@ -1,14 +1,13 @@
 'use client';
 
-import React, { ReactNode, useState, useEffect, useRef } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import MusicPlayer from '../player/MusicPlayer';
 import { FiMenu } from 'react-icons/fi';
 import AuthGuard from '../auth/AuthGuard';
-import { useAuth } from '@/lib/hooks/useAuth';
+
 import { motion, AnimatePresence } from 'framer-motion';
-import ThankYouModal from '../modals/ThankYouModal';
 
 
 type MainLayoutProps = {
@@ -18,7 +17,6 @@ type MainLayoutProps = {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { user } = useAuth();
 
   useEffect(() => {
     // Check if we're on client-side before using window

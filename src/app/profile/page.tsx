@@ -3,12 +3,9 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiEdit2, FiUser, FiMail, FiLock, FiSave, FiX, FiMusic, FiHeart, FiClock } from 'react-icons/fi';
+import { FiEdit2, FiUser, FiMail, FiLock, FiSave, FiX} from 'react-icons/fi';
 import MainLayout from '@/components/layout/MainLayout';
 import { useUser, useUpdateUser } from '@/lib/hooks/useUsers';
-import { usePlaylists } from '@/lib/hooks/usePlaylists';
-import { useFavorites } from '@/lib/hooks/useFavorites';
-import { useHistory } from '@/lib/hooks/useHistory';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function ProfilePage() {
@@ -16,9 +13,8 @@ export default function ProfilePage() {
   const userId = authUser?.id || '';
   
   const { user, loading: userLoading, error: userError } = useUser(userId);
-  const { playlists, loading: playlistsLoading } = usePlaylists(userId);
-  const { favorites, loading: favoritesLoading } = useFavorites(userId);
-  const { history, loading: historyLoading } = useHistory(userId);
+  // Removed favorites and playlists functionality
+  // const { history, loading: historyLoading } = useHistory(userId);
   const { updateUser, loading: updateLoading, error: updateError, success } = useUpdateUser(userId);
   
   const [isEditing, setIsEditing] = useState(false);
@@ -40,11 +36,11 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        password: '',
-        confirmPassword: '',
-        image: user.image || ''
+        name: user.name || "",
+        email: user.email || "",
+        password: "",
+        confirmPassword: "",
+        image: user.image || ""
       });
     }
   }, [user]);
@@ -98,7 +94,7 @@ export default function ProfilePage() {
     
     if (!validateForm()) return;
     
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       id: userId,
       name: formData.name,
       email: formData.email,
@@ -122,18 +118,18 @@ export default function ProfilePage() {
     // Reset form data to current user data
     if (user) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        password: '',
-        confirmPassword: '',
-        image: user.image || ''
+        name: user.name || "",
+        email: user.email || "",
+        password: "",
+        confirmPassword: "",
+        image: user.image || ""
       });
     }
     setFormErrors({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
     });
     setIsEditing(false);
   };
@@ -156,7 +152,7 @@ export default function ProfilePage() {
         <div className="flex flex-col items-center justify-center h-screen">
           <h2 className="text-2xl font-bold text-text-primary mb-4">Oops! Something went wrong</h2>
           <p className="text-text-secondary mb-6">
-            {userError || 'User not found'}
+            {userError || "User not found"}
           </p>
           <button 
             className="btn-primary"
@@ -306,11 +302,11 @@ export default function ProfilePage() {
                   {/* <div className="flex space-x-6 text-text-secondary">
                     <div className="flex items-center space-x-2">
                       <FiMusic />
-                      <span>{playlists?.length || 0} Playlists</span>
+                      <span>0 Playlists</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <FiHeart />
-                      <span>{favorites?.length || 0} Favorites</span>
+                      <span>0 Favorites</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <FiClock />
@@ -323,49 +319,7 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
-        {/* User's Playlists - Temporarily Hidden */}
-        {/* <motion.div
-          className="space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <h2 className="text-2xl font-bold text-text-primary">Your Playlists</h2>
-          {playlistsLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-            </div>
-          ) : playlists && playlists.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {playlists.map((playlist: any) => (
-                <motion.a
-                  key={playlist.id}
-                  href={`/playlist/${playlist.id}`}
-                  className="bg-background-light/10 rounded-xl overflow-hidden hover:bg-background-light/20 transition-colors"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="relative h-40 w-full">
-                    <Image
-                      src={playlist.coverUrl || '/images/category-cover-1.svg'}
-                      alt={playlist.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-text-primary">{playlist.title}</h3>
-                    <p className="text-text-secondary text-sm">{playlist.tracks?.length || 0} tracks</p>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 bg-background-light/10 rounded-xl">
-              <p className="text-text-secondary">You haven't created any playlists yet.</p>
-            </div>
-          )}
-        </motion.div> */}
+        {/* Playlists functionality removed */}
 
         {/* Recently Played - Temporarily Hidden */}
         {/* <motion.div

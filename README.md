@@ -39,6 +39,23 @@ Oyagema adalah platform streaming musik spiritual yang modern dan elegan, diranc
 - **Streaming**: Web Audio API
 - **Authentication**: Bcrypt untuk password hashing
 - **PWA**: Support install on mobile / desktop
+- **Type Safety**: TypeScript dengan strict mode
+
+## Kualitas Kode
+
+Proyek ini menekankan kualitas kode dan maintainability:
+
+- **Type Safety**: Menggunakan TypeScript dengan strict mode dan interface yang terdefinisi dengan baik
+- **Linting**: ESLint untuk menjaga konsistensi kode
+- **Git Hooks**: Pre-commit hooks untuk memastikan kode yang di-commit tidak memiliki error tipe
+- **Dokumentasi**: Kode dan API didokumentasikan dengan baik
+
+Untuk memeriksa tipe:
+```bash
+npm run type-check
+```
+
+Untuk informasi lebih lanjut tentang praktik kode terbaik, lihat [CODE_QUALITY_RECOMMENDATIONS.md](./CODE_QUALITY_RECOMMENDATIONS.md).
 
 ## Cara Menjalankan Proyek
 
@@ -47,7 +64,11 @@ Oyagema adalah platform streaming musik spiritual yang modern dan elegan, diranc
    ```bash
    npm install
    ```
-3. Siapkan database PostgreSQL:
+3. Setup Git hooks (opsional tapi direkomendasikan):
+   ```bash
+   npm run setup-hooks
+   ```
+4. Siapkan database PostgreSQL:
    - Pastikan PostgreSQL sudah terinstall dan berjalan di sistem Anda
    - Buat database baru untuk aplikasi ini
    - Sesuaikan file `.env` dengan kredensial database Anda

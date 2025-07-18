@@ -24,7 +24,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
     confirmPassword: '',
     image: '',
   });
-  const [originalEmail, setOriginalEmail] = useState('');
+  // const [originalEmail, setOriginalEmail] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,6 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
           confirmPassword: '',
           image: user.image || '',
         });
-        setOriginalEmail(user.email);
       } catch (error) {
         console.error('Error fetching user:', error);
         setSubmitMessage({
@@ -113,7 +112,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
     
     try {
       // Prepare update data (only include password if it was changed)
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         name: formData.name,
         email: formData.email,
         image: formData.image || null,
@@ -147,10 +146,10 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
         router.push('/admin/users');
       }, 1500);
       
-    } catch (error: any) {
+    } catch {
       setSubmitMessage({
         type: 'error',
-        message: error.message,
+        message: 'Failed to update user',
       });
     } finally {
       setIsSubmitting(false);

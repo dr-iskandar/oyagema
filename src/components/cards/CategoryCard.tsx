@@ -12,7 +12,7 @@ type CategoryCardProps = {
   href: string;
 };
 
-const CategoryCard = ({ id, title, description, coverUrl, href }: CategoryCardProps) => {
+const CategoryCard = ({ title, description, coverUrl, href }: CategoryCardProps) => {
   return (
     <Link href={href}>
       <motion.div 

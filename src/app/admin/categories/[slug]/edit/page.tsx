@@ -48,7 +48,7 @@ export default function EditCategoryPage({ params }: { params: { slug: string } 
           coverUrl: category.coverUrl,
           slug: category.slug,
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Error fetching category:', error);
         setError('Failed to load category data');
       } finally {
@@ -160,9 +160,9 @@ export default function EditCategoryPage({ params }: { params: { slug: string } 
       setTimeout(() => {
         router.push('/admin/categories');
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating category:', error);
-      setError(error.message || 'An error occurred while updating the category');
+      setError('An error occurred while updating the category');
     } finally {
       setLoading(false);
     }

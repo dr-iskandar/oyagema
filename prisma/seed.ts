@@ -167,47 +167,12 @@ async function main() {
     }
   }
 
-  // Create a playlist for the user
+  // Add some tracks to history
   const tracks = await prisma.track.findMany({
     take: 4,
   });
 
   if (tracks.length > 0) {
-    const playlist = await prisma.playlist.create({
-      data: {
-        title: 'Favorit Saya',
-        description: 'Your favorite tracks',
-        coverUrl: '/images/category-cover-1.svg',
-        userId: user.id,
-      },
-    });
-
-    console.log(`Created playlist: ${playlist.title}`);
-
-    // Add tracks to the playlist
-    for (const track of tracks) {
-      await prisma.playlistTrack.create({
-        data: {
-          playlistId: playlist.id,
-          trackId: track.id,
-        },
-      });
-    }
-
-    console.log(`Added ${tracks.length} tracks to playlist`);
-
-    // Add some tracks to favorites
-    for (let i = 0; i < 2; i++) {
-      await prisma.favorite.create({
-        data: {
-          userId: user.id,
-          trackId: tracks[i].id,
-        },
-      });
-    }
-
-    console.log('Added tracks to favorites');
-
     // Add some tracks to history
     for (const track of tracks) {
       await prisma.history.create({

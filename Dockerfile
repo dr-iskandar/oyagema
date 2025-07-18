@@ -1,12 +1,13 @@
 # Base image
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
 
-# Copy package files
+# Copy package files and prisma schema
 COPY package.json package-lock.json ./
+COPY prisma ./prisma/
 
 # Install dependencies
 RUN npm ci
@@ -18,7 +19,15 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Next.js collects anonymous telemetry data - disable it
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Set environment variables for build
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+# Skip database operations during build
+ENV NEXT_PUBLIC_SKIP_DB_OPERATIONS=true
+# Mock DATABASE_URL for Prisma during build
+ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/oyagema?schema=public
 
 # Build the application
 RUN npm run build
@@ -27,8 +36,8 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
@@ -46,7 +55,7 @@ USER nextjs
 EXPOSE 8996
 
 # Set port environment variable
-ENV PORT 8996
+ENV PORT=8996
 
 # Start the application
 CMD ["node", "server.js"]

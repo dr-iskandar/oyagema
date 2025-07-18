@@ -17,7 +17,7 @@ const navItems = [
 
 const userItems = [
   { name: 'Profile', href: '/profile', icon: FiUser },
-  { name: 'Favorites', href: '/favorites', icon: FiHeart },
+  // Removed favorites link
   { name: 'History', href: '/history', icon: FiClock },
 ];
 
@@ -41,12 +41,7 @@ type Category = {
   coverUrl: string;
 };
 
-const playlists = [
-  { name: 'Favorit Saya', href: '/playlist/favorites' },
-  { name: 'Meditasi Pagi', href: '/playlist/morning-meditation' },
-  { name: 'Tidur Nyenyak', href: '/playlist/sleep-well' },
-  { name: 'Fokus & Konsentrasi', href: '/playlist/focus' },
-];
+// Removed playlists
 
 type SidebarProps = {
   isMobile?: boolean;
@@ -141,7 +136,7 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
             onClick={(e: React.MouseEvent) => {
               e.preventDefault();
               e.stopPropagation();
-              onClose && onClose();
+              if (onClose) onClose();
             }}
             className="p-2 rounded-full hover:bg-background-light/50 text-text-primary"
           >
@@ -187,7 +182,7 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
                 User
               </h3>
               <ul className="space-y-1">
-                {userItems.filter(item => item.name !== 'Favorites').map((item) => {
+                {userItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <li key={item.name}>
@@ -198,7 +193,7 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
                             : 'text-text-secondary hover:text-text-primary hover:bg-background-light/50'
                             }`}
                         >
-                          <item.icon className={`text-lg ${isActive && item.name === 'Favorites' ? 'text-accent' : ''}`} />
+                          <item.icon className="text-lg" />
                           <span className="ml-3 text-sm">{item.name}</span>
                         </div>
                       </Link>
@@ -245,37 +240,7 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
               </ul>
             </div>
 
-            {/* Playlist Saya - Temporarily Hidden */}
-            {/* <div>
-              <div className="flex items-center justify-between px-4 mb-2">
-                <h3 className="text-text-muted text-xs uppercase font-bold tracking-wider">
-                  Playlist Saya
-                </h3>
-                <button className="text-text-muted hover:text-text-primary p-1 rounded-full hover:bg-background-light/50 transition-colors">
-                  <FiPlus />
-                </button>
-              </div>
-              <ul className="space-y-1">
-                {playlists.map((playlist) => {
-                  const isActive = pathname === playlist.href;
-                  return (
-                    <li key={playlist.name}>
-                      <Link href={playlist.href} onClick={handleItemClick}>
-                        <div
-                          className={`flex items-center p-2 rounded-lg transition-colors ${isActive
-                            ? 'bg-background-light text-text-primary'
-                            : 'text-text-secondary hover:text-text-primary hover:bg-background-light/50'
-                            }`}
-                        >
-                          <FiHeart className={`text-lg ${isActive ? 'text-accent' : ''}`} />
-                          <span className="ml-3 text-sm">{playlist.name}</span>
-                        </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div> */}
+            {/* Playlists functionality removed */}
           </>
         )}
       </nav>

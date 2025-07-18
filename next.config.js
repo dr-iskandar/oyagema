@@ -31,6 +31,9 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
+  // Skip API routes during static generation
+  skipMiddlewareUrlNormalize: true,
+  skipTrailingSlashRedirect: true,
   // PWA features will be implemented with next-pwa package later
 };
 

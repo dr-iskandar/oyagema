@@ -2,6 +2,30 @@
 
 ## 🎯 Masalah yang Telah Diperbaiki
 
+### 0. Type Safety untuk API Routes
+**Masalah**: Beberapa API routes menggunakan parameter tanpa type annotation, menyebabkan error TypeScript saat build.
+
+**Solusi**: 
+- Membuat file `src/types/models.ts` dengan definisi interface untuk semua model database
+- Menggunakan interface tersebut di API routes untuk parameter dan return values
+- Contoh implementasi di `favorites/route.ts` dan `history/route.ts`
+
+```typescript
+// src/types/models.ts
+export interface FavoriteWithTrack extends Favorite {
+  track: Track;
+}
+
+// src/app/api/favorites/route.ts
+import { FavoriteWithTrack } from '@/types/models';
+
+// Menggunakan type annotation
+const formattedFavorites = favorites.map((favorite: FavoriteWithTrack) => ({
+  id: favorite.id,
+  // ...
+}));
+```
+
 ### 1. Duplikasi History Tracking
 **Masalah**: useEffect menambahkan track ke history setiap kali currentTrack berubah, menyebabkan duplikasi entry.
 

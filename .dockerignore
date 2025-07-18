@@ -2,6 +2,7 @@
 
 # Dependencies
 node_modules
+# Don't ignore package-lock.json as it's needed for npm ci
 
 # Build outputs
 .next

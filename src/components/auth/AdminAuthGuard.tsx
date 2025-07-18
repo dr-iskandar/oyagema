@@ -17,7 +17,6 @@ type AdminUser = {
 const AdminAuthGuard = ({ children }: AdminAuthGuardProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,8 +25,6 @@ const AdminAuthGuard = ({ children }: AdminAuthGuardProps) => {
         // Check if admin is logged in from localStorage
         const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
         const adminId = localStorage.getItem('adminId');
-        const adminName = localStorage.getItem('adminName');
-        const adminEmail = localStorage.getItem('adminEmail');
 
         if (!isAdminLoggedIn || !adminId) {
           console.log('Admin not logged in, redirecting to admin login');
@@ -67,13 +64,7 @@ const AdminAuthGuard = ({ children }: AdminAuthGuardProps) => {
           return;
         }
 
-        // Set admin user data
-        setAdminUser({
-          id: adminId!,
-          name: adminName || '',
-          email: adminEmail || '',
-          role: data.user.role,
-        });
+        // Admin verification successful
         setIsAuthenticated(true);
       } catch (error) {
         console.error('Admin auth check error:', error);

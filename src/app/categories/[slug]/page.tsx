@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { FiPlay, FiClock, FiMusic, FiPlus } from 'react-icons/fi';
+
+import { FiPlay, FiClock, FiMusic } from 'react-icons/fi';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 
@@ -27,7 +27,6 @@ type Category = {
 };
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const router = useRouter();
   const { slug } = params;
   const { playTrack } = useAudioPlayer();
   
@@ -81,10 +80,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
     });
   };
 
-  const handleAddToPlaylist = (trackId: string) => {
-    // In a real app, this would open a modal to select a playlist
-    console.log(`Adding track ${trackId} to playlist`);
-  };
+  // Removed playlist functionality
 
   if (isLoading) {
     return (
@@ -185,13 +181,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
                             >
                               <FiPlay size={18} />
                             </button>
-                            <button
-                              onClick={() => handleAddToPlaylist(track.id)}
-                              className="text-text-secondary hover:text-text-primary transition-colors p-2 rounded-full hover:bg-background-light/20"
-                              aria-label="Add to playlist"
-                            >
-                              <FiPlus size={18} />
-                            </button>
+                            {/* Add to playlist button removed */}
                           </div>
                         </td>
                       </tr>
@@ -234,13 +224,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
                         >
                           <FiPlay size={16} />
                         </button>
-                        <button
-                          onClick={() => handleAddToPlaylist(track.id)}
-                          className="text-text-secondary hover:text-text-primary transition-colors p-2 rounded-full hover:bg-background-light/20"
-                          aria-label="Add to playlist"
-                        >
-                          <FiPlus size={16} />
-                        </button>
+                        {/* Add to playlist button removed */}
                       </div>
                     </div>
                   </div>

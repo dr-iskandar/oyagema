@@ -121,9 +121,9 @@ export default function NewCategoryPage() {
       setTimeout(() => {
         router.push('/admin/categories');
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating category:', error);
-      setError(error.message || 'An error occurred while creating the category');
+      setError('An error occurred while creating the category');
     } finally {
       setLoading(false);
     }

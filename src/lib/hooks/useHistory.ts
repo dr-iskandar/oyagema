@@ -77,9 +77,9 @@ export function useAddToHistory(userId: string) {
       }
       
       return true;
-    } catch (err: any) {
-      console.error('Error adding to history:', err);
-      setError(err.message || 'Failed to add to history. Please try again later.');
+    } catch (error: unknown) {
+       console.error('Error adding to history:', error);
+       setError('Failed to add to history. Please try again later.');
       return false;
     } finally {
       setLoading(false);

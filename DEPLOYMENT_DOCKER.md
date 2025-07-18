@@ -16,6 +16,15 @@ Proyek Oyagema terdiri dari dua komponen utama:
 - Git (untuk mengkloning repositori)
 - Akses ke server dengan port 8996, 5000, dan 5432 terbuka
 
+### Versi Software
+
+Aplikasi ini menggunakan versi software berikut dalam Docker containers:
+- Node.js: v20 (Alpine)
+- PostgreSQL: v15 (Alpine)
+- npm: versi default yang disertakan dengan Node.js v20
+
+> **Catatan**: Jika Anda mengalami masalah kompatibilitas, pastikan Docker menggunakan image yang benar sesuai dengan yang didefinisikan dalam Dockerfile.
+
 ## Langkah-langkah Deployment
 
 ### 1. Kloning Repositori

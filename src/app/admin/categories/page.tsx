@@ -53,9 +53,9 @@ export default function CategoriesAdminPage() {
 
       // Remove the deleted category from the state
       setCategories(categories.filter(category => category.slug !== slug));
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error deleting category:', error);
-      alert(error.message || 'Failed to delete category');
+      alert('Failed to delete category');
     }
   };
 

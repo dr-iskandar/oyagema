@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { HistoryWithTrack } from '@/types/models';
 
 // Get play history for a user
 export async function GET(request: Request) {
@@ -37,7 +38,7 @@ export async function GET(request: Request) {
     
     // Convert back to array and format the response
     const uniqueHistory = Array.from(trackMap.values());
-    const formattedHistory = uniqueHistory.map((entry) => ({
+    const formattedHistory = uniqueHistory.map((entry: HistoryWithTrack) => ({
       id: entry.id,
       userId: entry.userId,
       trackId: entry.trackId,

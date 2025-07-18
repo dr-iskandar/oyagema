@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiPlay, FiPause, FiVolume2, FiVolumeX, FiPlus, FiHeart, FiShare2, FiMusic } from 'react-icons/fi';
+import { FiPlay, FiPause, FiVolume2, FiVolumeX, FiHeart, FiShare2, FiMusic } from 'react-icons/fi';
 import MainLayout from '@/components/layout/MainLayout';
 
 type Category = {
@@ -147,11 +147,6 @@ export default function TrackPage({ params }: { params: { id: string } }) {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const handleAddToPlaylist = () => {
-    // In a real app, this would open a dialog to add the track to a playlist
-    console.log('Adding to playlist');
-  };
-
   const handleLike = () => {
     // In a real app, this would add the track to favorites
     console.log('Liked track');
@@ -231,13 +226,7 @@ export default function TrackPage({ params }: { params: { id: string } }) {
                   <span>{isPlaying ? 'Pause' : 'Play'}</span>
                 </button>
                 
-                <button 
-                  onClick={handleAddToPlaylist}
-                  className="btn-secondary flex items-center gap-2"
-                >
-                  <FiPlus size={18} />
-                  <span>Add to Playlist</span>
-                </button>
+                {/* Add to playlist button removed */}
                 
                 <button 
                   onClick={handleLike}

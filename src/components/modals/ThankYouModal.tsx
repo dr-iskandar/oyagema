@@ -3,7 +3,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiHeart, FiCheck } from 'react-icons/fi';
-import { useAuth } from '@/lib/hooks/useAuth';
 
 type ThankYouModalProps = {
   isOpen: boolean;
@@ -12,7 +11,7 @@ type ThankYouModalProps = {
 };
 
 const ThankYouModal = ({ isOpen, onClose, donationAmount }: ThankYouModalProps) => {
-  const { user } = useAuth();
+  // Removed user variable
   
   // Pastikan modal hanya muncul sekali dan dapat ditutup dengan benar
   const handleClose = () => {

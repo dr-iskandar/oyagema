@@ -1,5 +1,18 @@
 import { useState, useEffect } from 'react';
 
+type Track = {
+  id: string;
+  title: string;
+  artist: string;
+  description: string | null;
+  coverUrl: string;
+  audioUrl: string;
+  duration: string;
+  categoryId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type Category = {
   id: string;
   title: string;
@@ -8,6 +21,7 @@ type Category = {
   slug: string;
   createdAt: string;
   updatedAt: string;
+  tracks?: Track[];
 };
 
 export function useCategories() {
@@ -28,7 +42,7 @@ export function useCategories() {
         const data = await response.json();
         setCategories(data);
         setError(null);
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error fetching categories:', err);
         setError('Failed to load categories. Please try again later.');
       } finally {
@@ -43,7 +57,7 @@ export function useCategories() {
 }
 
 export function useCategoryBySlug(slug: string) {
-  const [category, setCategory] = useState<any>(null);
+  const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,7 +79,7 @@ export function useCategoryBySlug(slug: string) {
         const data = await response.json();
         setCategory(data);
         setError(null);
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(`Error fetching category ${slug}:`, err);
         setError('Failed to load category. Please try again later.');
       } finally {
