@@ -14,11 +14,15 @@ COPY prisma ./prisma/
 
 # Set environment variables to ignore Prisma checksum issues and improve npm behavior
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV PRISMA_SKIP_POSTINSTALL_GENERATE=true
 ENV npm_config_cache=/tmp/.npm
 ENV npm_config_prefer_offline=true
 
-# Install dependencies
-RUN npm ci
+# Install dependencies without running postinstall
+RUN npm ci --ignore-scripts
+
+# Generate Prisma client manually
+RUN npx prisma generate
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -37,10 +41,14 @@ ENV NODE_ENV=production
 ENV NEXT_PUBLIC_SKIP_DB_OPERATIONS=true
 ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/oyagema?schema=public
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV PRISMA_SKIP_POSTINSTALL_GENERATE=true
 ENV npm_config_cache=/tmp/.npm
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm ci
+# Install all dependencies (including dev dependencies for build) without running postinstall
+RUN npm ci --ignore-scripts
+
+# Generate Prisma client manually
+RUN npx prisma generate
 
 # Copy source code
 COPY . .
