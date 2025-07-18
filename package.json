@@ -27,7 +27,16 @@
     "docker:nginx": "docker-compose -f docker-compose.nginx.yml up -d --build",
     "docker:nginx:down": "docker-compose -f docker-compose.nginx.yml down",
     "docker:nginx:logs": "docker-compose -f docker-compose.nginx.yml logs -f",
-    "migrate:deploy": "prisma migrate deploy"
+    "migrate:deploy": "prisma migrate deploy",
+    "pm2:deploy": "./deploy-pm2.sh",
+    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop ecosystem.config.js",
+    "pm2:restart": "pm2 restart ecosystem.config.js",
+    "pm2:reload": "pm2 reload ecosystem.config.js",
+    "pm2:delete": "pm2 delete ecosystem.config.js",
+    "pm2:logs": "pm2 logs",
+    "pm2:status": "pm2 status",
+    "pm2:monit": "pm2 monit"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

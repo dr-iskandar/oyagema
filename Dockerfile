@@ -17,8 +17,8 @@ ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 ENV npm_config_cache=/tmp/.npm
 ENV npm_config_prefer_offline=true
 
-# Clean npm cache and install dependencies
-RUN npm cache clean --force && npm ci --only=production --ignore-scripts && npm run prisma:generate
+# Install dependencies
+RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -40,7 +40,7 @@ ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 ENV npm_config_cache=/tmp/.npm
 
 # Install all dependencies (including dev dependencies for build)
-RUN npm cache clean --force && npm ci --ignore-scripts && npm run prisma:generate
+RUN npm ci
 
 # Copy source code
 COPY . .
