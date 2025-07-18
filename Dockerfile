@@ -5,34 +5,45 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
+# Install necessary system dependencies
+RUN apk add --no-cache libc6-compat
+
 # Copy package files and prisma schema
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
 
-# Set environment variable to ignore Prisma checksum issues
+# Set environment variables to ignore Prisma checksum issues and improve npm behavior
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV npm_config_cache=/tmp/.npm
+ENV npm_config_prefer_offline=true
 
-# Install dependencies
-RUN npm ci
+# Clean npm cache and install dependencies
+RUN npm cache clean --force && npm ci --only=production --ignore-scripts && npm run prisma:generate
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
 
-# Next.js collects anonymous telemetry data - disable it
-ENV NEXT_TELEMETRY_DISABLED=1
+# Install system dependencies
+RUN apk add --no-cache libc6-compat
+
+# Copy package files first
+COPY package.json package-lock.json ./
+COPY prisma ./prisma/
 
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-# Skip database operations during build
 ENV NEXT_PUBLIC_SKIP_DB_OPERATIONS=true
-# Mock DATABASE_URL for Prisma during build
 ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/oyagema?schema=public
-# Set environment variable to ignore Prisma checksum issues
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV npm_config_cache=/tmp/.npm
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm cache clean --force && npm ci --ignore-scripts && npm run prisma:generate
+
+# Copy source code
+COPY . .
 
 # Build the application
 RUN npm run build
