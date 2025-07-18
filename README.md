@@ -141,12 +141,36 @@ docker-compose -f docker-compose.production.yml up -d --build
 docker-compose -f docker-compose.production.yml exec nextjs npx prisma migrate deploy
 ```
 
+#### Production dengan Nginx (Recommended)
+
+Untuk deployment production dengan Nginx sebagai reverse proxy:
+
+```bash
+# Deploy dengan Nginx
+./deploy-nginx.sh
+```
+
+Atau manual:
+
+```bash
+# Setup SSL certificates
+mkdir -p ssl
+cp your-certificate.crt ssl/oyagema.com.crt
+cp your-private-key.key ssl/oyagema.com.key
+
+# Deploy dengan Nginx
+docker-compose -f docker-compose.nginx.yml up -d --build
+```
+
 **Server Information:**
 - Server IP: 88.222.212.111
-- Application: http://88.222.212.111:8996
-- Donation Service: http://88.222.212.111:5001
+- Domain: https://oyagema.com
+- Application: http://88.222.212.111:8996 (direct access)
+- Donation Service: http://88.222.212.111:5001 (direct access)
 
-Untuk panduan deployment lengkap, lihat [DEPLOYMENT_PRODUCTION.md](./DEPLOYMENT_PRODUCTION.md).
+Untuk panduan deployment lengkap:
+- [DEPLOYMENT_PRODUCTION.md](./DEPLOYMENT_PRODUCTION.md) - Deployment tanpa Nginx
+- [DEPLOYMENT_NGINX.md](./DEPLOYMENT_NGINX.md) - Deployment dengan Nginx (Recommended)
 
 ## Struktur Proyek
 

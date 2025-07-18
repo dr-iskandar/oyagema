@@ -19,10 +19,14 @@
     "create-admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts",
     "postinstall": "npm run prisma:generate",
     "deploy:production": "./deploy-production.sh",
+    "deploy:nginx": "./deploy-nginx.sh",
     "setup:production": "./setup-production.sh",
     "docker:prod": "docker-compose -f docker-compose.production.yml up -d --build",
     "docker:prod:down": "docker-compose -f docker-compose.production.yml down",
     "docker:prod:logs": "docker-compose -f docker-compose.production.yml logs -f",
+    "docker:nginx": "docker-compose -f docker-compose.nginx.yml up -d --build",
+    "docker:nginx:down": "docker-compose -f docker-compose.nginx.yml down",
+    "docker:nginx:logs": "docker-compose -f docker-compose.nginx.yml logs -f",
     "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {

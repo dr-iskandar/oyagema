@@ -51,3 +51,9 @@ logs
 
 # Docker volumes
 postgres_data
+
+# SSL certificates (security)
+ssl/
+*.crt
+*.key
+*.pem
