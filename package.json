@@ -17,7 +17,13 @@
     "prisma:studio": "prisma studio",
     "db:seed": "npx prisma db seed",
     "create-admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts",
-    "postinstall": "npm run prisma:generate"
+    "postinstall": "npm run prisma:generate",
+    "deploy:production": "./deploy-production.sh",
+    "setup:production": "./setup-production.sh",
+    "docker:prod": "docker-compose -f docker-compose.production.yml up -d --build",
+    "docker:prod:down": "docker-compose -f docker-compose.production.yml down",
+    "docker:prod:logs": "docker-compose -f docker-compose.production.yml logs -f",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

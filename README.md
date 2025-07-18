@@ -100,6 +100,8 @@ Untuk informasi lebih lanjut tentang praktik kode terbaik, lihat [CODE_QUALITY_R
 
 ## Build untuk Production
 
+### Local Production Build
+
 ```bash
 # Build aplikasi
 npm run build
@@ -107,6 +109,44 @@ npm run build
 # Jalankan versi production
 npm start
 ```
+
+### Docker Deployment
+
+#### Development (Local)
+
+```bash
+# Jalankan dengan Docker Compose
+docker-compose up -d --build
+```
+
+#### Production (Niagahoster Server)
+
+Untuk deployment ke server production Niagahoster:
+
+```bash
+# Deploy ke production server
+./deploy-production.sh
+```
+
+Atau manual:
+
+```bash
+# Copy production environment
+cp .env.production .env
+
+# Deploy dengan Docker Compose production
+docker-compose -f docker-compose.production.yml up -d --build
+
+# Jalankan migrasi database
+docker-compose -f docker-compose.production.yml exec nextjs npx prisma migrate deploy
+```
+
+**Server Information:**
+- Server IP: 88.222.212.111
+- Application: http://88.222.212.111:8996
+- Donation Service: http://88.222.212.111:5001
+
+Untuk panduan deployment lengkap, lihat [DEPLOYMENT_PRODUCTION.md](./DEPLOYMENT_PRODUCTION.md).
 
 ## Struktur Proyek
 

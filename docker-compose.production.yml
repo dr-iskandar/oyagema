@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8996:8996"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:Kacapirin9!@88.222.212.111:5433/oyagema?schema=public
+      - NEXTAUTH_URL=http://88.222.212.111:8996
+      - NEXTAUTH_SECRET=oyagema_production_secret_2024_voice_of_heaven
+      - DONATION_SERVICE_URL=http://88.222.212.111:5001
+    volumes:
+      - ./public/uploads:/app/public/uploads
+    networks:
+      - oyagema-network
+    restart: unless-stopped
+    depends_on:
+      - donation-service
+
+  donation-service:
+    build:
+      context: ./donation-service
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:Kacapirin9!@88.222.212.111:5433/oyagema?schema=public
+    networks:
+      - oyagema-network
+    restart: unless-stopped
+
+networks:
+  oyagema-network:
+    driver: bridge
+
+volumes:
+  uploads:
