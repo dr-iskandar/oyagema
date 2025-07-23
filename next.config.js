@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone', // Optimized for Docker deployment
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -22,19 +22,28 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // domains is deprecated, using remotePatterns instead
+    // Add local domain for uploads
+    domains: ['oyagema.com', 'localhost'],
+    // Disable optimization for uploads in standalone mode
+    unoptimized: process.env.NODE_ENV === 'production',
   },
   // Configure global settings for API routes and server actions
   experimental: {
     serverActions: {
-      // Increase body size limit for file uploads (default is 1MB)
       bodySizeLimit: '10mb',
     },
   },
-  // Skip API routes during static generation
   skipMiddlewareUrlNormalize: true,
   skipTrailingSlashRedirect: true,
-  // PWA features will be implemented with next-pwa package later
+  // Add rewrites for static files in standalone mode
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/api/static/uploads/:path*',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
