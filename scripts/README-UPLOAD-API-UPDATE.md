@@ -1,51 +1,91 @@
-# Update API Upload untuk Menangani Aset di Standalone Output
+# Upload API Update - Automatic Asset Management
 
-Dokumen ini menjelaskan perubahan yang telah dilakukan pada API upload untuk mengatasi masalah akses folder `public` saat menjalankan aplikasi dengan PM2 dalam mode output `standalone` Next.js.
+This document explains the changes made to the upload API to automatically handle static asset management in standalone Next.js applications running with PM2.
 
-## Permasalahan
+## Problem
 
-Ketika aplikasi Next.js dijalankan dengan PM2 dalam mode output `standalone`, folder `public` tidak secara otomatis tersedia di output `.next/standalone/`. Hal ini menyebabkan aset yang baru diunggah tidak dapat diakses oleh aplikasi yang sedang berjalan.
+When running a Next.js application in standalone mode with PM2, uploaded files saved to `public/uploads/` are not accessible because the standalone build creates its own isolated `public` directory at `.next/standalone/public/`. This causes uploaded assets to be inaccessible to users.
 
-## Solusi yang Diterapkan
+## Solution
 
-API upload (`src/app/api/upload/route.ts`) telah dimodifikasi untuk secara otomatis menjalankan script `post-asset:sh` setelah file berhasil diunggah. Script ini akan menyalin aset yang baru diunggah dari `public/uploads` ke `.next/standalone/public/uploads`.
+The `/api/upload` endpoint has been modified to automatically detect the runtime environment and handle file uploads appropriately:
 
-### Perubahan pada API Upload
+1. **Standalone Mode (Production)**: Files are saved directly to `.next/standalone/public/uploads/`
+2. **Development/Regular Mode**: Files are saved to `public/uploads/` and the `post-asset:sh` script is executed to sync them
 
-1. Menambahkan import `exec` dari modul `child_process`:
-   ```typescript
-   import { exec } from 'child_process';
-   ```
+## Implementation Details
 
-2. Menambahkan kode untuk menjalankan script `post-asset:sh` setelah file berhasil disimpan:
-   ```typescript
-   // Run post-asset script to copy the file to standalone output
-   try {
-     exec('npm run post-asset:sh', (error, stdout, stderr) => {
-       if (error) {
-         console.error('Error running post-asset script:', error);
-         return;
-       }
-       console.log('Post-asset script output:', stdout);
-       if (stderr) {
-         console.error('Post-asset script stderr:', stderr);
-       }
-     });
-   } catch (scriptError) {
-     console.error('Failed to execute post-asset script:', scriptError);
-     // Continue anyway, as the file is already saved to public/uploads
-   }
-   ```
+### Changes Made
 
-## Cara Kerja
+1. **Environment Detection**: Added logic to detect if running in standalone mode
+2. **Dynamic Path Resolution**: Uses appropriate upload directory based on environment
+3. **Conditional Script Execution**: Only runs post-asset script when not in standalone mode
+4. **Directory Creation**: Ensures upload directory exists before saving files
 
-1. Ketika pengguna mengunggah file melalui API upload, file tersebut disimpan di folder `public/uploads`.
-2. Setelah file berhasil disimpan, API secara otomatis menjalankan script `post-asset:sh`.
-3. Script `post-asset:sh` akan menyalin file yang baru diunggah dari `public/uploads` ke `.next/standalone/public/uploads`.
-4. Dengan demikian, file yang baru diunggah akan langsung tersedia di aplikasi yang sedang berjalan dengan PM2.
+### Code Changes
 
-## Catatan Penting
+```typescript
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { exec } from 'child_process';
 
-1. Pastikan script `post-asset:sh` memiliki izin eksekusi (`chmod +x scripts/post-asset.sh`).
-2. Jika Anda menggunakan API upload lain selain `/api/upload`, pastikan untuk menambahkan kode serupa untuk menjalankan script `post-asset:sh`.
-3. Untuk lingkungan produksi dengan volume tinggi, pertimbangkan untuk menggunakan penyimpanan eksternal (seperti S3, Google Cloud Storage, dll.) untuk file yang diunggah pengguna, daripada menyimpannya di sistem file lokal.
+// Environment detection
+const isStandalone = process.env.NODE_ENV === 'production' && 
+                    existsSync(join(process.cwd(), '.next', 'standalone'));
+
+// Dynamic path resolution
+let publicDir, uploadsDir;
+
+if (isStandalone) {
+  // In standalone mode, save to .next/standalone/public/uploads
+  publicDir = join(process.cwd(), '.next', 'standalone', 'public');
+  uploadsDir = join(publicDir, 'uploads');
+} else {
+  // In development or regular production, save to public/uploads
+  publicDir = join(process.cwd(), 'public');
+  uploadsDir = join(publicDir, 'uploads');
+}
+
+// Ensure directory exists and save file
+await mkdir(uploadsDir, { recursive: true });
+await writeFile(filePath, buffer);
+
+// Run post-asset script only in non-standalone mode
+if (!isStandalone) {
+  exec('npm run post-asset:sh', (error, stdout, stderr) => {
+    // ... error handling ...
+  });
+}
+```
+
+## Benefits
+
+1. **Environment-Aware**: Automatically adapts to different deployment scenarios
+2. **Direct File Access**: In standalone mode, files are immediately accessible without additional copying
+3. **Backward Compatibility**: Maintains existing behavior for development and regular production
+4. **Robust Error Handling**: Upload functionality is preserved even if sync operations fail
+5. **Performance Optimization**: Eliminates unnecessary file copying in standalone mode
+
+## Environment Behavior
+
+### Development Mode
+- Files saved to: `public/uploads/`
+- Post-asset script: **Executed** (for testing PM2 compatibility)
+- File accessibility: Immediate via Next.js static file serving
+
+### Standalone Production Mode
+- Files saved to: `.next/standalone/public/uploads/`
+- Post-asset script: **Not executed** (unnecessary)
+- File accessibility: Immediate via standalone server
+
+### Regular Production Mode
+- Files saved to: `public/uploads/`
+- Post-asset script: **Executed** (for PM2 compatibility)
+- File accessibility: After script execution
+
+## Notes
+
+- Environment detection is based on `NODE_ENV=production` and existence of `.next/standalone` directory
+- Directory creation is handled automatically with `mkdir({ recursive: true })`
+- This solution eliminates the ENOENT errors seen in standalone deployments
+- For high-volume production environments, consider using external storage services (AWS S3, Cloudinary, etc.)

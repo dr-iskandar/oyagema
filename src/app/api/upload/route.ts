@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { exec } from 'child_process';
+import { existsSync } from 'fs';
 
 // Note: In App Router, the config for bodyParser and responseLimit
 // should be set in next.config.js instead of here
@@ -38,12 +39,28 @@ export async function POST(request: Request) {
     
     // Define the path where the file will be saved
     // In a real production app, you would use a cloud storage service
-    const publicDir = join(process.cwd(), 'public');
-    const uploadsDir = join(publicDir, 'uploads');
+    
+    // Check if running in standalone mode (production)
+    const isStandalone = process.env.NODE_ENV === 'production' && 
+                        existsSync(join(process.cwd(), '.next', 'standalone'));
+    
+    let publicDir, uploadsDir;
+    
+    if (isStandalone) {
+      // In standalone mode, save to .next/standalone/public/uploads
+      publicDir = join(process.cwd(), '.next', 'standalone', 'public');
+      uploadsDir = join(publicDir, 'uploads');
+    } else {
+      // In development or regular production, save to public/uploads
+      publicDir = join(process.cwd(), 'public');
+      uploadsDir = join(publicDir, 'uploads');
+    }
+    
     const filePath = join(uploadsDir, fileName);
     
     // Ensure the uploads directory exists
     try {
+      await mkdir(uploadsDir, { recursive: true });
       await writeFile(filePath, buffer);
     } catch (error) {
       console.error('Error saving file:', error);
@@ -56,21 +73,23 @@ export async function POST(request: Request) {
     // Return the URL to the uploaded file
     const fileUrl = `/uploads/${fileName}`;
     
-    // Run post-asset script to copy the file to standalone output
-    try {
-      exec('npm run post-asset:sh', (error, stdout, stderr) => {
-        if (error) {
-          console.error('Error running post-asset script:', error);
-          return;
-        }
-        console.log('Post-asset script output:', stdout);
-        if (stderr) {
-          console.error('Post-asset script stderr:', stderr);
-        }
-      });
-    } catch (scriptError) {
-      console.error('Failed to execute post-asset script:', scriptError);
-      // Continue anyway, as the file is already saved to public/uploads
+    // Run post-asset script to copy the file to standalone output (only in non-standalone mode)
+    if (!isStandalone) {
+      try {
+        exec('npm run post-asset:sh', (error, stdout, stderr) => {
+          if (error) {
+            console.error('Error running post-asset script:', error);
+            return;
+          }
+          console.log('Post-asset script output:', stdout);
+          if (stderr) {
+            console.error('Post-asset script stderr:', stderr);
+          }
+        });
+      } catch (scriptError) {
+        console.error('Failed to execute post-asset script:', scriptError);
+        // Continue anyway, as the file is already saved to public/uploads
+      }
     }
     
     return NextResponse.json({ 
