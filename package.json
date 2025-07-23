@@ -26,7 +26,8 @@
     "update-all": "npm run update-public && npm run update-uploads && npm run update-static",
     "post-asset": "cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true && echo 'Asset berhasil disalin ke standalone output'",
     "post-asset:sh": "./scripts/post-asset.sh",
-    "post-asset:all": "./scripts/post-asset.sh"
+    "post-asset:all": "./scripts/post-asset.sh",
+    "fix-standalone": "./scripts/fix-standalone-build.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
