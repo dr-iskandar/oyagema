@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && cp -r public .next/standalone/",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "type-check": "./scripts/check-types.sh",
     "setup-hooks": "./scripts/setup-hooks.sh",
@@ -22,7 +22,9 @@
     "deploy:pm2": "./scripts/deploy-pm2.sh",
     "update-public": "cp -r public .next/standalone/",
     "update-uploads": "mkdir -p .next/standalone/public/uploads && cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true",
-    "update-static": "npm run update-public && npm run update-uploads"
+    "update-static": "npm run update-public && npm run update-uploads",
+    "post-asset": "cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true && echo 'Asset berhasil disalin ke standalone output'",
+    "post-asset:sh": "./scripts/post-asset.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

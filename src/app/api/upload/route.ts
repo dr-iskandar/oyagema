@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { exec } from 'child_process';
 
 // Note: In App Router, the config for bodyParser and responseLimit
 // should be set in next.config.js instead of here
@@ -54,6 +55,23 @@ export async function POST(request: Request) {
     
     // Return the URL to the uploaded file
     const fileUrl = `/uploads/${fileName}`;
+    
+    // Run post-asset script to copy the file to standalone output
+    try {
+      exec('npm run post-asset:sh', (error, stdout, stderr) => {
+        if (error) {
+          console.error('Error running post-asset script:', error);
+          return;
+        }
+        console.log('Post-asset script output:', stdout);
+        if (stderr) {
+          console.error('Post-asset script stderr:', stderr);
+        }
+      });
+    } catch (scriptError) {
+      console.error('Failed to execute post-asset script:', scriptError);
+      // Continue anyway, as the file is already saved to public/uploads
+    }
     
     return NextResponse.json({ 
       url: fileUrl,
