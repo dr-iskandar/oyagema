@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && cp -r public .next/standalone/",
     "start": "next start",
     "lint": "next lint",
     "type-check": "./scripts/check-types.sh",
@@ -19,7 +19,10 @@
     "create-admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts",
     "postinstall": "npm run prisma:generate",
     "migrate:deploy": "prisma migrate deploy",
-    "deploy:pm2": "./scripts/deploy-pm2.sh"
+    "deploy:pm2": "./scripts/deploy-pm2.sh",
+    "update-public": "cp -r public .next/standalone/",
+    "update-uploads": "mkdir -p .next/standalone/public/uploads && cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true",
+    "update-static": "npm run update-public && npm run update-uploads"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

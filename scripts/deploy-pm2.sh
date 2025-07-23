@@ -19,6 +19,18 @@ npx prisma generate
 echo "🏗️ Building the application..."
 npm run build
 
+# Ensure public folder is copied to standalone output
+echo "📂 Copying public folder to standalone output..."
+cp -r public .next/standalone/
+
+# Ensure uploads folder exists and is properly copied
+echo "📂 Setting up uploads folder in standalone output..."
+mkdir -p .next/standalone/public/uploads
+# Copy uploads content if any exists
+if [ -d "public/uploads" ] && [ "$(ls -A public/uploads 2>/dev/null)" ]; then
+  cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true
+fi
+
 # Apply database migrations
 echo "🗃️ Applying database migrations..."
 npx prisma migrate deploy
