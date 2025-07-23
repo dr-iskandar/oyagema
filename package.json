@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cp -r public .next/standalone/",
-    "start": "node .next/standalone/server.js",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "type-check": "./scripts/check-types.sh",
     "setup-hooks": "./scripts/setup-hooks.sh",
@@ -19,15 +19,7 @@
     "create-admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts",
     "postinstall": "npm run prisma:generate",
     "migrate:deploy": "prisma migrate deploy",
-    "deploy:pm2": "./scripts/deploy-pm2.sh",
-    "update-public": "cp -r public .next/standalone/",
-    "update-uploads": "mkdir -p .next/standalone/public/uploads && cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true",
-    "update-static": "mkdir -p .next/standalone/.next/static && cp -r .next/static/* .next/standalone/.next/static/ 2>/dev/null || true",
-    "update-all": "npm run update-public && npm run update-uploads && npm run update-static",
-    "post-asset": "cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true && echo 'Asset berhasil disalin ke standalone output'",
-    "post-asset:sh": "./scripts/post-asset.sh",
-    "post-asset:all": "./scripts/post-asset.sh",
-    "fix-standalone": "./scripts/fix-standalone-build.sh"
+    "deploy:pm2": "./scripts/deploy-pm2.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
