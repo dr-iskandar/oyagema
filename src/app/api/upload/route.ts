@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { syncMusicUpload, isSyncEnabled } from '@/lib/utils/sync-uploads';
 
 // Note: In App Router, the config for bodyParser and responseLimit
 // should be set in next.config.js instead of here
@@ -55,6 +56,11 @@ export async function POST(request: Request) {
         { error: 'Failed to save file' },
         { status: 500 }
       );
+    }
+    
+    // Execute sync script if enabled and this is an audio file (music upload)
+    if (isSyncEnabled()) {
+      await syncMusicUpload(file.type);
     }
     
     // Return the URL to the uploaded file

@@ -35,6 +35,26 @@ module.exports = {
       time: true,
       max_memory_restart: '512M',
       kill_timeout: 5000
+    },
+    {
+      name: 'upload-watcher',
+      script: './scripts/upload-watcher.js',
+      cwd: './',
+      instances: 1,
+      exec_mode: 'fork',
+      env: {
+        NODE_ENV: 'production',
+        ENABLE_UPLOAD_SYNC: 'true'
+      },
+      error_file: './logs/upload-watcher-error.log',
+      out_file: './logs/upload-watcher-out.log',
+      log_file: './logs/upload-watcher.log',
+      time: true,
+      max_memory_restart: '256M',
+      kill_timeout: 5000,
+      restart_delay: 5000,
+      max_restarts: 10,
+      min_uptime: '10s'
     }
   ]
 };
