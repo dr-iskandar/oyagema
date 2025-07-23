@@ -50,9 +50,9 @@ if (isStandalone) {
 await mkdir(uploadsDir, { recursive: true });
 await writeFile(filePath, buffer);
 
-// Run post-asset script only in non-standalone mode
+// Run enhanced post-asset script only in non-standalone mode
 if (!isStandalone) {
-  exec('npm run post-asset:sh', (error, stdout, stderr) => {
+  exec('npm run post-asset:all', (error, stdout, stderr) => {
     // ... error handling ...
   });
 }
@@ -65,22 +65,25 @@ if (!isStandalone) {
 3. **Backward Compatibility**: Maintains existing behavior for development and regular production
 4. **Robust Error Handling**: Upload functionality is preserved even if sync operations fail
 5. **Performance Optimization**: Eliminates unnecessary file copying in standalone mode
+6. **Complete Asset Management**: Automatically copies all necessary files (uploads, public, and static) to the standalone directory
 
 ## Environment Behavior
 
 ### Development Mode
 - Files saved to: `public/uploads/`
-- Post-asset script: **Executed** (for testing PM2 compatibility)
+- Enhanced post-asset script: **Executed** (for testing PM2 compatibility)
+- Files copied: Uploads, Public, and Static assets
 - File accessibility: Immediate via Next.js static file serving
 
 ### Standalone Production Mode
 - Files saved to: `.next/standalone/public/uploads/`
-- Post-asset script: **Not executed** (unnecessary)
+- Enhanced post-asset script: **Not executed** (unnecessary)
 - File accessibility: Immediate via standalone server
 
 ### Regular Production Mode
 - Files saved to: `public/uploads/`
-- Post-asset script: **Executed** (for PM2 compatibility)
+- Enhanced post-asset script: **Executed** (for PM2 compatibility)
+- Files copied: Uploads, Public, and Static assets
 - File accessibility: After script execution
 
 ## Notes
@@ -89,3 +92,4 @@ if (!isStandalone) {
 - Directory creation is handled automatically with `mkdir({ recursive: true })`
 - This solution eliminates the ENOENT errors seen in standalone deployments
 - For high-volume production environments, consider using external storage services (AWS S3, Cloudinary, etc.)
+- For more detailed information about the asset automation process, see [README-ASSET-AUTOMATION.md](./README-ASSET-AUTOMATION.md)

@@ -22,9 +22,11 @@
     "deploy:pm2": "./scripts/deploy-pm2.sh",
     "update-public": "cp -r public .next/standalone/",
     "update-uploads": "mkdir -p .next/standalone/public/uploads && cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true",
-    "update-static": "npm run update-public && npm run update-uploads",
+    "update-static": "mkdir -p .next/standalone/.next/static && cp -r .next/static/* .next/standalone/.next/static/ 2>/dev/null || true",
+    "update-all": "npm run update-public && npm run update-uploads && npm run update-static",
     "post-asset": "cp -r public/uploads/* .next/standalone/public/uploads/ 2>/dev/null || true && echo 'Asset berhasil disalin ke standalone output'",
-    "post-asset:sh": "./scripts/post-asset.sh"
+    "post-asset:sh": "./scripts/post-asset.sh",
+    "post-asset:all": "./scripts/post-asset.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",

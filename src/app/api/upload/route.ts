@@ -73,10 +73,10 @@ export async function POST(request: Request) {
     // Return the URL to the uploaded file
     const fileUrl = `/uploads/${fileName}`;
     
-    // Run post-asset script to copy the file to standalone output (only in non-standalone mode)
+    // Run post-asset script to copy all necessary files to standalone output (only in non-standalone mode)
     if (!isStandalone) {
       try {
-        exec('npm run post-asset:sh', (error, stdout, stderr) => {
+        exec('npm run post-asset:all', (error, stdout, stderr) => {
           if (error) {
             console.error('Error running post-asset script:', error);
             return;
