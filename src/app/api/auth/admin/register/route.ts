@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 // Admin key untuk validasi - dalam production sebaiknya disimpan di environment variable
 const ADMIN_KEY = process.env.ADMIN_REGISTRATION_KEY || 'oyagema-admin-2024';

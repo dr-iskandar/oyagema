@@ -18,13 +18,14 @@
     "db:seed": "npx prisma db seed",
     "create-admin": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts",
     "postinstall": "npm run prisma:generate",
-    "migrate:deploy": "prisma migrate deploy"
+    "migrate:deploy": "prisma migrate deploy",
+    "deploy:pm2": "./scripts/deploy-pm2.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.16",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
     "framer-motion": "^10.16.4",
     "jsmediatags": "^3.9.7",
     "jsmediatags-web": "^0.0.4",
@@ -39,7 +40,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",

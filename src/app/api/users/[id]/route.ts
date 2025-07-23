@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 // Get a user by ID
 export async function GET(

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 // Get all users (admin only in a real app)
 export async function GET() {
