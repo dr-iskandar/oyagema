@@ -36,13 +36,18 @@ export async function POST(request: Request) {
     const fileName = `${uuidv4()}.${extension}`;
     
     // Define the path where the file will be saved
-    // In a real production app, you would use a cloud storage service
-    const publicDir = join(process.cwd(), 'public');
+    // In standalone mode, use the correct path
+    const isStandalone = process.env.NODE_ENV === 'production' && process.env.NEXT_RUNTIME !== 'nodejs';
+    const publicDir = isStandalone 
+      ? join(process.cwd(), 'public')
+      : join(process.cwd(), 'public');
     const uploadsDir = join(publicDir, 'uploads');
     const filePath = join(uploadsDir, fileName);
     
     // Ensure the uploads directory exists
     try {
+      const { mkdir } = await import('fs/promises');
+      await mkdir(uploadsDir, { recursive: true });
       await writeFile(filePath, buffer);
     } catch (error) {
       console.error('Error saving file:', error);
