@@ -8,6 +8,7 @@ import { FiHome, FiSearch, FiHeart, FiList, FiUser, FiPlus, FiSun, FiClock, FiX 
 import { IoMusicalNotes } from 'react-icons/io5';
 import { MdOutlineAutoStories } from 'react-icons/md';
 import DonationModal from '@/components/modals/DonationModal';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 const navItems = [
   { name: 'Home', href: '/', icon: FiHome },
@@ -51,6 +52,7 @@ type SidebarProps = {
 
 const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => {
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -148,6 +150,11 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
       <nav className="flex-1 overflow-y-auto px-2">
         <ul className="space-y-2 mb-6">
           {navItems.map((item) => {
+            // Hide 'Your Library' if user is not authenticated
+            if (item.name === 'Your Library' && !isAuthenticated) {
+              return null;
+            }
+            
             const isActive = pathname === item.href;
             return (
               <li key={item.name}>
@@ -175,7 +182,7 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
           })}
         </ul>
 
-        {isExpanded && (
+        {isExpanded && isAuthenticated && (
           <>
             <div className="mb-4">
               <h3 className="text-text-muted text-xs uppercase font-bold tracking-wider px-4 mb-2">
@@ -202,6 +209,11 @@ const Sidebar = ({ isMobile = false, isOpen = true, onClose }: SidebarProps) => 
                 })}
               </ul>
             </div>
+          </>
+        )}
+        
+        {isExpanded && (
+          <>
 
             <div className="mb-4">
               <h3 className="text-text-muted text-xs uppercase font-bold tracking-wider px-4 mb-2">
