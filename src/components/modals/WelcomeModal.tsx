@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiChevronLeft, FiChevronRight, FiMusic, FiHeart, FiHeadphones } from 'react-icons/fi';
 
@@ -11,33 +11,78 @@ type WelcomeModalProps = {
 
 const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [language, setLanguage] = useState<'id' | 'en'>('id');
 
-  const slides = [
-    {
-      id: 1,
-      icon: <FiMusic className="text-6xl text-primary mb-6" />,
-      title: "Selamat Datang di Oyagema",
-      description: "Platform meditasi dan relaksasi dengan koleksi audio berkualitas tinggi untuk membantu Anda menemukan ketenangan dalam kehidupan sehari-hari.",
-      features: [
-        "🎵 Koleksi audio meditasi premium",
-        "🧘‍♀️ Berbagai kategori relaksasi",
-        "📱 Akses mudah di semua perangkat",
-        "🎧 Kualitas audio terbaik"
-      ]
-    },
-    {
-      id: 2,
-      icon: <FiHeart className="text-6xl text-accent mb-6" />,
-      title: "Dukung Oyagema",
-      description: "Oyagema adalah platform gratis yang didedikasikan untuk kesehatan mental. Dukungan Anda membantu kami terus menyediakan konten berkualitas.",
-      features: [
-        "💝 Donasi sukarela untuk keberlanjutan",
-        "🌱 Membantu pengembangan fitur baru",
-        "🤝 Mendukung komunitas kesehatan mental",
-        "🎯 100% untuk pengembangan platform"
-      ]
+  useEffect(() => {
+    // Detect browser language
+    const browserLang = navigator.language.toLowerCase();
+    if (browserLang.startsWith('en')) {
+      setLanguage('en');
+    } else {
+      setLanguage('id');
     }
-  ];
+  }, []);
+
+  const content = {
+    id: {
+      slides: [
+        {
+           id: 1,
+           icon: <FiMusic className="text-6xl text-primary mb-6" />,
+           title: "OYAGEMA",
+           subtitle: "Suara Surga untuk Jiwa yang Lelah",
+           description: "OYAGEMA bukan sekadar platform musik. Ini adalah tempat perlindungan bagi jiwa ruang di mana suara menjadi penyembuh, dan melodi menjadi pesan harapan. Lahir dari kasih dan dijalankan dengan kerendahan hati, OYAGEMA hadir untuk membantu manusia kembali terhubung dengan cahaya di dalam dirinya."
+         },
+        {
+          id: 2,
+          icon: <FiHeart className="text-6xl text-accent mb-6" />,
+          title: "Dukung Oyagema",
+          description: "Oyagema adalah platform gratis yang didedikasikan untuk kesehatan mental. Dukungan Anda membantu kami terus menyediakan konten berkualitas.",
+          features: [
+            "🎵 Musik bisa menyembuhkan luka yang tak bisa dijangkau kata-kata",
+            "🧘‍♀️ Harmoni bukan hanya dalam suara, tetapi juga dalam hidup",
+            "🌍 Panggilan global untuk membawa surga ke bumi",
+            "💫 Satu lagu, satu jiwa, satu momen yang penuh makna"
+          ]
+        }
+      ],
+      navigation: {
+        previous: "Sebelumnya",
+        next: "Selanjutnya",
+        startListening: "Mulai Mendengarkan"
+      }
+    },
+    en: {
+      slides: [
+        {
+           id: 1,
+           icon: <FiMusic className="text-6xl text-primary mb-6" />,
+           title: "OYAGEMA",
+           subtitle: "Heaven's Voice for Weary Souls",
+           description: "OYAGEMA is more than just a music platform. It is a sanctuary for the soul a space where sound becomes healing, and melodies become messages of hope. Born from compassion and guided by humility, OYAGEMA exists to help people reconnect with their inner light. Through music, we speak to the silent battles, the hidden grief, the unspoken dreams, and the longing for peace that lives in every human heart."
+         },
+        {
+          id: 2,
+          icon: <FiHeart className="text-6xl text-accent mb-6" />,
+          title: "Support Oyagema",
+          description: "Oyagema is a free platform dedicated to mental health and spiritual healing. Your support helps us continue providing quality content for everyone.",
+          features: [
+            "🎵 Music can heal wounds words cannot reach",
+            "🧘‍♀️ Harmony not just in sound, but in life and nature",
+            "🌍 A global call to bring heaven to earth",
+            "💫 One song, one soul, one moment at a time"
+          ]
+        }
+      ],
+      navigation: {
+        previous: "Previous",
+        next: "Next",
+        startListening: "Start Listening"
+      }
+    }
+  };
+
+  const slides = content[language].slides;
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
@@ -83,6 +128,30 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
               <FiX className="text-text-secondary" size={20} />
             </button>
             
+            {/* Language Toggle */}
+            <div className="absolute top-4 left-4 flex space-x-1">
+              <button
+                onClick={() => setLanguage('id')}
+                className={`px-2 py-1 text-xs rounded transition-colors ${
+                  language === 'id' 
+                    ? 'bg-primary text-white' 
+                    : 'text-text-secondary hover:bg-background-dark/20'
+                }`}
+              >
+                ID
+              </button>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2 py-1 text-xs rounded transition-colors ${
+                  language === 'en' 
+                    ? 'bg-primary text-white' 
+                    : 'text-text-secondary hover:bg-background-dark/20'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+            
             {/* Slide Indicators */}
             <div className="flex justify-center space-x-2 mb-6">
               {slides.map((_, index) => (
@@ -113,9 +182,16 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
                 </div>
 
                 {/* Title */}
-                <h2 className="text-2xl font-bold text-text-primary mb-4">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   {slides[currentSlide].title}
                 </h2>
+
+                {/* Subtitle */}
+                {slides[currentSlide].subtitle && (
+                  <h3 className="text-xl text-primary mb-4 italic">
+                    {slides[currentSlide].subtitle}
+                  </h3>
+                )}
 
                 {/* Description */}
                 <p className="text-text-secondary mb-6 leading-relaxed">
@@ -123,19 +199,21 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
                 </p>
 
                 {/* Features */}
-                <div className="space-y-3 mb-8">
-                  {slides[currentSlide].features.map((feature, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="text-left text-text-primary bg-background-dark/20 rounded-lg p-3"
-                    >
-                      {feature}
-                    </motion.div>
-                  ))}
-                </div>
+                {slides[currentSlide].features && (
+                  <div className="space-y-3 mb-8">
+                    {slides[currentSlide].features.map((feature, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="text-left text-text-primary bg-background-dark/20 rounded-lg p-3"
+                      >
+                        {feature}
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -152,7 +230,7 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
               }`}
             >
               <FiChevronLeft size={16} />
-              <span>Sebelumnya</span>
+              <span>{content[language].navigation.previous}</span>
             </button>
 
             {currentSlide === slides.length - 1 ? (
@@ -161,14 +239,14 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
                 className="flex items-center space-x-2 px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
               >
                 <FiHeadphones size={16} />
-                <span>Mulai Mendengarkan</span>
+                <span>{content[language].navigation.startListening}</span>
               </button>
             ) : (
               <button
                 onClick={nextSlide}
                 className="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
               >
-                <span>Selanjutnya</span>
+                <span>{content[language].navigation.next}</span>
                 <FiChevronRight size={16} />
               </button>
             )}
