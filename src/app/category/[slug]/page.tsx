@@ -1,112 +1,72 @@
-'use client';
-
 import React from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { Metadata } from 'next';
+import CategoryPageClient from './CategoryPageClient';
 
-import GuestLayout from '@/components/layout/GuestLayout';
-import TrackGrid from '@/components/sections/TrackGrid';
-import { useCategoryBySlug } from '@/lib/hooks/useCategories';
-import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
-
-// Define Track type to match TrackGrid expectations
-type TrackGridTrack = {
-  id: string;
-  title: string;
-  artist: string;
-  coverUrl: string;
-  audioUrl?: string;
-  duration?: string;
-};
+// Generate metadata for category pages
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug } = params;
+  
+  try {
+    // Fetch category data for metadata
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/categories/${slug}`);
+    
+    if (!res.ok) {
+      return {
+        title: 'Category Not Found | Oyagema',
+        description: 'The requested category could not be found on Oyagema spiritual music streaming platform.',
+      };
+    }
+    
+    const category = await res.json();
+    
+    return {
+      title: `${category.title} - Spiritual Music Category | Oyagema`,
+      description: `Explore ${category.title} spiritual music on Oyagema. ${category.description || 'Discover healing music, meditation tracks, and mindfulness content.'} Stream ${category.tracks?.length || 0} tracks in this category.`,
+      keywords: [
+        category.title.toLowerCase(),
+        'spiritual music',
+        'healing music',
+        'meditation music',
+        'mindfulness',
+        'musik spiritual',
+        'lagu rohani',
+        category.title.toLowerCase().includes('healing') ? 'musik penyembuhan' : '',
+        category.title.toLowerCase().includes('meditation') ? 'musik meditasi' : '',
+      ].filter(Boolean),
+      openGraph: {
+        title: `${category.title} - Spiritual Music Category | Oyagema`,
+        description: `Explore ${category.title} spiritual music on Oyagema. ${category.description || 'Discover healing music, meditation tracks, and mindfulness content.'}`,
+        images: [
+          {
+            url: category.coverUrl || '/images/og-image.svg',
+            width: 1200,
+            height: 630,
+            alt: `${category.title} - Spiritual Music Category`,
+          },
+        ],
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${category.title} - Spiritual Music Category | Oyagema`,
+        description: `Explore ${category.title} spiritual music on Oyagema. ${category.description || 'Discover healing music and meditation tracks.'}`,
+        images: [category.coverUrl || '/images/og-image.svg'],
+      },
+      alternates: {
+        canonical: `/category/${slug}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata for category:', error);
+    return {
+      title: 'Spiritual Music Category | Oyagema',
+      description: 'Explore spiritual music categories on Oyagema. Discover healing music, meditation tracks, and mindfulness content.',
+    };
+  }
+}
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const { category, loading, error } = useCategoryBySlug(slug);
-  const { playTrack } = useAudioPlayer();
-
-  const handleTrackClick = (track: TrackGridTrack) => {
-    playTrack({
-      id: track.id,
-      title: track.title,
-      artist: track.artist,
-      coverUrl: track.coverUrl,
-      audioUrl: track.audioUrl || '/audio/sample.mp3', // Fallback for mock data
-      duration: track.duration || '3:00', // Fallback for mock data
-    });
-  };
-
-  // Show loading state
-  if (loading) {
-    return (
-      <GuestLayout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        </div>
-      </GuestLayout>
-    );
-  }
-
-  // Show error state
-  if (error || !category) {
-    return (
-      <GuestLayout>
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h2 className="text-2xl font-bold text-text-primary mb-4">Oops! Something went wrong</h2>
-          <p className="text-text-secondary mb-6">
-            {error || 'Category not found'}
-          </p>
-          <button 
-            className="btn-primary"
-            onClick={() => window.history.back()}
-          >
-            Go Back
-          </button>
-        </div>
-      </GuestLayout>
-    );
-  }
-
-  return (
-    <GuestLayout>
-      <div className="space-y-8">
-        {/* Category Header */}
-        <motion.div 
-          className="relative w-full h-64 rounded-2xl overflow-hidden"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Image 
-            src={category.coverUrl} 
-            alt={category.title} 
-            fill 
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent">
-            <div className="absolute bottom-0 left-0 p-8 w-full">
-              <div className="max-w-2xl">
-                <h2 className="text-4xl font-bold text-text-primary mb-2">{category.title}</h2>
-                <p className="text-xl text-text-secondary mb-4">{category.description}</p>
-                <p className="text-text-secondary mb-6">{category.tracks?.length || 0} tracks</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-        
-        {/* Category Tracks */}
-        {category.tracks && category.tracks.length > 0 ? (
-          <TrackGrid 
-            title="Tracks"
-            tracks={category.tracks}
-            onTrackClick={handleTrackClick}
-          />
-        ) : (
-          <div className="text-center py-12">
-            <h3 className="text-xl text-text-secondary">No tracks available in this category yet.</h3>
-          </div>
-        )}
-      </div>
-    </GuestLayout>
-  );
+  
+  return <CategoryPageClient slug={slug} />;
 }

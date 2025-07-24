@@ -1,0 +1,47 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A1A2E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6C2BD9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9D4EDD;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="100" r="50" fill="#6C2BD9" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="80" fill="#9D4EDD" opacity="0.1"/>
+  <circle cx="1050" cy="150" r="30" fill="#6C2BD9" opacity="0.2"/>
+  
+  <!-- Logo Icon -->
+  <g transform="translate(500, 200)">
+    <!-- Music Note Icon -->
+    <path d="M50 0C77.614 0 100 22.386 100 50V150C100 177.614 77.614 200 50 200C22.386 200 0 177.614 0 150V50C0 22.386 22.386 0 50 0Z" fill="url(#textGradient)"/>
+    <circle cx="50" cy="170" r="20" fill="#FFFFFF"/>
+    <rect x="45" y="50" width="10" height="120" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Main Title -->
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="72" font-weight="bold" text-anchor="middle" fill="url(#textGradient)">
+    Oyagema
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="36" text-anchor="middle" fill="#FFFFFF" opacity="0.9">
+    Spiritual Music Streaming Platform
+  </text>
+  
+  <!-- Description -->
+  <text x="600" y="480" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#FFFFFF" opacity="0.7">
+    Healing Music • Meditation • Mindfulness
+  </text>
+  
+  <!-- Bottom decorative line -->
+  <rect x="300" y="550" width="600" height="4" fill="url(#textGradient)" rx="2"/>
+</svg>

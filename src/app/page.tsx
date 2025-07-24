@@ -104,6 +104,17 @@ export default function Home() {
   return (
     <GuestLayout>
       <div className="space-y-6 sm:space-y-7 md:space-y-8 px-2 sm:px-4 md:px-6">
+        {/* SEO-optimized main heading */}
+        <header className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-text-primary mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Oyagema - Spiritual Music Streaming
+          </h1>
+          <p className="text-lg sm:text-xl text-text-secondary max-w-3xl mx-auto">
+            Discover healing music, meditation tracks, and spiritual songs for your mindfulness journey. 
+            Stream instrumental music, inspirational content, and therapeutic sounds.
+          </p>
+        </header>
+
         {dailyError ? (
           <div className="relative w-full h-64 sm:h-72 md:h-80 rounded-xl md:rounded-2xl overflow-hidden bg-red-500/10 border border-red-500/20 flex items-center justify-center">
             <div className="text-center">
@@ -112,38 +123,56 @@ export default function Home() {
             </div>
           </div>
         ) : dailyRecommendation ? (
-          <DailyRecommendation 
-            track={dailyRecommendation}
-            onPlay={handlePlayRecommendation}
-          />
+          <section aria-labelledby="daily-recommendation">
+            <h2 id="daily-recommendation" className="sr-only">Daily Recommendation</h2>
+            <DailyRecommendation 
+              track={dailyRecommendation}
+              onPlay={handlePlayRecommendation}
+            />
+          </section>
         ) : (
           <div className="relative w-full h-64 sm:h-72 md:h-80 rounded-xl md:rounded-2xl overflow-hidden bg-background-light/10 flex items-center justify-center">
             <p className="text-text-secondary">No daily recommendation available</p>
           </div>
         )}
         
-        <TrackGrid 
-          title="Recently Played"
-          tracks={recentTracks}
-          onTrackClick={handleTrackClick}
-        />
+        <section aria-labelledby="recently-played">
+          <h2 id="recently-played" className="text-2xl sm:text-3xl font-bold text-text-primary mb-4 sm:mb-6">
+            Recently Played
+          </h2>
+          <TrackGrid 
+            title="Recently Played"
+            tracks={recentTracks}
+            onTrackClick={handleTrackClick}
+          />
+        </section>
         
-        <CategoryGrid 
-          title="Explore Categories"
-          categories={categories?.map(category => ({
-            id: category.id,
-            title: category.title,
-            description: category.description || '',
-            coverUrl: category.coverUrl,
-            href: `/category/${category.slug}`,
-          })) || []}
-        />
+        <section aria-labelledby="explore-categories">
+          <h2 id="explore-categories" className="text-2xl sm:text-3xl font-bold text-text-primary mb-4 sm:mb-6">
+            Explore Categories
+          </h2>
+          <CategoryGrid 
+            title="Explore Categories"
+            categories={categories?.map(category => ({
+              id: category.id,
+              title: category.title,
+              description: category.description || '',
+              coverUrl: category.coverUrl,
+              href: `/category/${category.slug}`,
+            })) || []}
+          />
+        </section>
         
-        <TrackGrid 
-          title="Popular Tracks"
-          tracks={popularTracks}
-          onTrackClick={handleTrackClick}
-        />
+        <section aria-labelledby="popular-tracks">
+          <h2 id="popular-tracks" className="text-2xl sm:text-3xl font-bold text-text-primary mb-4 sm:mb-6">
+            Popular Tracks
+          </h2>
+          <TrackGrid 
+            title="Popular Tracks"
+            tracks={popularTracks}
+            onTrackClick={handleTrackClick}
+          />
+        </section>
       </div>
     </GuestLayout>
   );
