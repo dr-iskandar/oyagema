@@ -34,7 +34,7 @@ const DailyRecommendation = ({ track, onPlay }: DailyRecommendationProps) => {
         <div className="absolute bottom-0 left-0 p-4 sm:p-6 md:p-8 w-full">
           <div className="flex items-end justify-between">
             <div className="max-w-2xl">
-              <h4 className="text-accent font-medium mb-1 sm:mb-2 text-sm sm:text-base bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full inline-block shadow-lg" style={{textShadow: '0 2px 4px rgba(0,0,0,0.8)'}}>Daily Recommendation</h4>
+              <h4 className="text-white font-medium mb-1 sm:mb-2 text-sm sm:text-base bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full inline-block shadow-lg" style={{textShadow: '0 2px 4px rgba(0,0,0,0.8)'}}>Daily Recommendation</h4>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-primary mb-1 sm:mb-2">{track.title}</h2>
               <p className="text-lg sm:text-xl text-text-secondary mb-2 sm:mb-4">{track.artist}</p>
               <p className="text-text-secondary mb-3 sm:mb-6 line-clamp-2 text-sm sm:text-base">{track.description}</p>
