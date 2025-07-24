@@ -209,7 +209,16 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-text-primary font-medium text-sm truncate">{track.title}</h3>
+                        <h3 className="text-text-primary font-medium text-sm leading-tight">
+                          {track.title.split(' ').reduce((acc, word, index) => {
+                            if (index % 2 === 0 && index > 0) {
+                              acc += '\n';
+                            }
+                            return acc + (index > 0 && index % 2 !== 0 ? ' ' : '') + word;
+                          }, '').split('\n').map((line, i) => (
+                            <span key={i} className="block">{line}</span>
+                          ))}
+                        </h3>
                         <div className="flex items-center justify-between mt-0.5">
                           <p className="text-text-secondary text-xs truncate">{track.artist}</p>
                           <span className="text-text-secondary text-xs ml-1.5">{formatDuration(track.duration)}</span>
