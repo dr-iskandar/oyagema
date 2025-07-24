@@ -102,26 +102,32 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
         // Store current path to localStorage to return after payment
         if (typeof window !== 'undefined') {
           // Get the current path
-    const currentPath = window.location.pathname;
-    // Store the current path in localStorage
-    localStorage.setItem('previousPath', currentPath);
+          const currentPath = window.location.pathname;
+          // Store the current path in localStorage
+          localStorage.setItem('previousPath', currentPath);
         }
         
-        // Open payment window and store reference
-        paymentWindowRef.current = window.open(paymentUrl, '_blank');
+        // Check if we're on mobile Safari or iOS
+        const isMobileSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                              (navigator.userAgent.includes('Safari') && /Mobi|Android/i.test(navigator.userAgent));
         
-        // We don't need to check if payment window is closed anymore
-        // The thank you modal will be shown when we receive PAYMENT_COMPLETE message
-        // from the success page
-        if (paymentWindowRef.current) {
-          // Just set up interval to clean up references if window closes without completing payment
-          checkIntervalRef.current = setInterval(() => {
-            if (paymentWindowRef.current && paymentWindowRef.current.closed) {
-              // Payment window closed, clean up interval
-              clearInterval(checkIntervalRef.current as NodeJS.Timeout);
-              checkIntervalRef.current = null;
-            }
-          }, 1000); // Check every second
+        if (isMobileSafari) {
+          // For mobile Safari, use direct redirect to avoid popup blocker
+          window.location.href = paymentUrl;
+        } else {
+          // For desktop browsers, open in new tab
+          paymentWindowRef.current = window.open(paymentUrl, '_blank');
+          
+          // Set up interval to clean up references if window closes without completing payment
+          if (paymentWindowRef.current) {
+            checkIntervalRef.current = setInterval(() => {
+              if (paymentWindowRef.current && paymentWindowRef.current.closed) {
+                // Payment window closed, clean up interval
+                clearInterval(checkIntervalRef.current as NodeJS.Timeout);
+                checkIntervalRef.current = null;
+              }
+            }, 1000); // Check every second
+          }
         }
         
         onClose();

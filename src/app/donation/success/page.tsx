@@ -36,32 +36,59 @@ export default function DonationSuccessPage() {
       setDonationAmount(formattedAmount);
     }
     
-    // This is the success page, so we should notify the opener window
-    // We'll use window.opener to communicate with the opener window
-    if (typeof window !== 'undefined' && window.opener) {
-      // Signal to the opener window that payment is complete
-      try {
-        // Send message with donation amount to opener window
-        window.opener.postMessage({ 
-          type: 'PAYMENT_COMPLETE', 
-          success: true,
-          amount: donationAmount || amount
-        }, '*');
-      } catch (error) {
-        console.error('Error communicating with opener window:', error);
+    // Check if we're in a popup window (desktop) or same tab (mobile Safari)
+    if (typeof window !== 'undefined') {
+      const isPopup = window.opener && window.opener !== window;
+      
+      if (isPopup) {
+        // We're in a popup window (desktop), notify the opener window
+        try {
+          window.opener.postMessage({ 
+            type: 'PAYMENT_COMPLETE', 
+            success: true,
+            amount: donationAmount || amount
+          }, '*');
+        } catch (error) {
+          console.error('Error communicating with opener window:', error);
+        }
+      } else {
+        // We're in the same tab (mobile Safari), set up auto-redirect after showing success
+        const timer = setTimeout(() => {
+          const previousPath = localStorage.getItem('previousPath');
+          if (previousPath) {
+            localStorage.removeItem('previousPath');
+            window.location.href = previousPath;
+          } else {
+            window.location.href = '/';
+          }
+        }, 3000); // Show success message for 3 seconds
+        
+        return () => clearTimeout(timer);
       }
     }
   }, [searchParams, donationAmount]);
 
   const handleCloseTab = () => {
-    // Close this tab
     if (typeof window !== 'undefined') {
-      window.close();
+      const isPopup = window.opener && window.opener !== window;
       
-      // If window.close() doesn't work (which can happen in some browsers),
-      // we'll try to communicate with the opener window again
-      if (window.opener) {
-        window.opener.focus();
+      if (isPopup) {
+        // We're in a popup window (desktop), close the tab
+        window.close();
+        
+        // If window.close() doesn't work, try to focus the opener window
+        if (window.opener) {
+          window.opener.focus();
+        }
+      } else {
+        // We're in the same tab (mobile Safari), navigate back
+        const previousPath = localStorage.getItem('previousPath');
+        if (previousPath) {
+          localStorage.removeItem('previousPath');
+          window.location.href = previousPath;
+        } else {
+          window.location.href = '/';
+        }
       }
     }
   };
