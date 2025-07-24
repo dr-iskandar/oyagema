@@ -100,7 +100,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       
       {/* Main content - full width on mobile, with margin on desktop */}
       <div className={`flex-1 transition-all duration-300 ${!isMobile ? 'md:ml-[250px]' : ''} pb-24 ml-0`}>
-        <div className="container mx-auto px-4 md:px-6 py-6">
+        <div className="container mx-auto px-4 md:px-6 pt-16 md:pt-6 pb-6">
           {children}
         </div>
       </div>

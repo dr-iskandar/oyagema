@@ -99,7 +99,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       </motion.aside>
 
       {/* Main content */}
-      <div className={`flex-1 transition-all duration-300 md:ml-[250px] ml-0 p-6`}>
+      <div className={`flex-1 transition-all duration-300 md:ml-[250px] ml-0 pt-16 md:pt-6 px-6 pb-6`}>
         {children}
       </div>
     </div>
