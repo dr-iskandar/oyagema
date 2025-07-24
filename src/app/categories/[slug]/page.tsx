@@ -191,15 +191,15 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
               </div>
 
               {/* Mobile Card View */}
-              <div className="md:hidden space-y-3">
+              <div className="md:hidden space-y-2">
                 {category.tracks.map((track, index) => (
-                  <div key={track.id} className="bg-background-light/10 rounded-xl p-4 hover:bg-background-light/15 transition-colors">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0 text-text-secondary text-sm font-medium w-6">
+                  <div key={track.id} className="bg-background-light/10 rounded-lg p-3 hover:bg-background-light/15 transition-colors">
+                    <div className="flex items-center space-x-2.5">
+                      <div className="flex-shrink-0 text-text-secondary text-xs font-medium w-5">
                         {index + 1}
                       </div>
                       
-                      <div className="h-12 w-12 flex-shrink-0 relative rounded-lg overflow-hidden">
+                      <div className="h-10 w-10 flex-shrink-0 relative rounded-md overflow-hidden">
                         <Image
                           src={track.coverUrl || '/images/track-cover-1.svg'}
                           alt={track.title}
@@ -210,19 +210,19 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
                       
                       <div className="flex-1 min-w-0">
                         <h3 className="text-text-primary font-medium text-sm truncate">{track.title}</h3>
-                        <div className="flex items-center justify-between mt-1">
+                        <div className="flex items-center justify-between mt-0.5">
                           <p className="text-text-secondary text-xs truncate">{track.artist}</p>
-                          <span className="text-text-secondary text-xs ml-2">{formatDuration(track.duration)}</span>
+                          <span className="text-text-secondary text-xs ml-1.5">{formatDuration(track.duration)}</span>
                         </div>
                       </div>
                       
-                      <div className="flex items-center space-x-1 flex-shrink-0">
+                      <div className="flex items-center flex-shrink-0">
                         <button
                           onClick={() => handlePlayTrack(track)}
-                          className="text-primary hover:text-primary-dark transition-colors p-2 rounded-full hover:bg-primary/10"
+                          className="text-primary hover:text-primary-dark transition-colors p-1.5 rounded-full hover:bg-primary/10"
                           aria-label="Play track"
                         >
-                          <FiPlay size={16} />
+                          <FiPlay size={14} />
                         </button>
                         {/* Add to playlist button removed */}
                       </div>
