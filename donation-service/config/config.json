@@ -1,10 +1,10 @@
 {
   "development": {
     "username": "postgres",
-    "password": "123456",
-    "database": "oyagema_donations",
+    "password": "Kacapirin9!",
+    "database": "oyagema",
     "host": "127.0.0.1",
-    "port": 5436,
+    "port": 5432,
     "dialect": "postgres"
   },
   "production": {

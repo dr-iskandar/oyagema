@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiHeart, FiCreditCard } from 'react-icons/fi';
+import { FiX, FiHeart, FiCreditCard, FiMail, FiUser } from 'react-icons/fi';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 type DonationModalProps = {
@@ -15,7 +15,8 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [message, setMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  // Removed paymentData state
+  const [guestEmail, setGuestEmail] = useState('');
+  const [guestName, setGuestName] = useState('');
   const paymentWindowRef = useRef<Window | null>(null);
   const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { user } = useAuth();
@@ -46,9 +47,19 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
       return;
     }
     
-    if (!user) {
-      alert('Please login to make a donation');
+    // Check if user is logged in or guest has provided email
+    if (!user && (!guestEmail || !guestName)) {
+      alert('Please provide your name and email to make a donation');
       return;
+    }
+
+    // Email validation for guest users
+    if (!user && guestEmail) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(guestEmail)) {
+        alert('Please enter a valid email address');
+        return;
+      }
     }
 
     setIsProcessing(true);
@@ -61,8 +72,8 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          donor_name: user.name || 'Anonymous',
-          donor_email: user.email,
+          donor_name: user ? (user.name || 'Anonymous') : guestName,
+          donor_email: user ? user.email : guestEmail,
           amount: donationAmount,
           message: message.trim()
         }),
@@ -132,7 +143,8 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
       setAmount('');
       setSelectedAmount(null);
       setMessage('');
-      // Removed setPaymentData call
+      setGuestEmail('');
+      setGuestName('');
       onClose();
     }
   };
@@ -227,8 +239,29 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
                       <p className="text-text-secondary text-xs sm:text-sm">{user.email}</p>
                     </div>
                   ) : (
-                    <div className="bg-background rounded-lg p-3 sm:p-4">
-                      <p className="text-text-muted text-xs sm:text-sm">Please login to make a donation</p>
+                    <div className="space-y-3">
+                      <div className="relative">
+                        <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted" size={16} />
+                        <input
+                          type="text"
+                          value={guestName}
+                          onChange={(e) => setGuestName(e.target.value)}
+                          placeholder="Your name"
+                          disabled={isProcessing}
+                          className="w-full pl-10 pr-3 sm:pr-4 py-2 sm:py-3 rounded-lg border-2 border-background-dark/20 focus:border-primary focus:outline-none bg-background text-text-primary placeholder-text-muted disabled:opacity-50 text-sm sm:text-base"
+                        />
+                      </div>
+                      <div className="relative">
+                        <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted" size={16} />
+                        <input
+                          type="email"
+                          value={guestEmail}
+                          onChange={(e) => setGuestEmail(e.target.value)}
+                          placeholder="Your email address"
+                          disabled={isProcessing}
+                          className="w-full pl-10 pr-3 sm:pr-4 py-2 sm:py-3 rounded-lg border-2 border-background-dark/20 focus:border-primary focus:outline-none bg-background text-text-primary placeholder-text-muted disabled:opacity-50 text-sm sm:text-base"
+                        />
+                      </div>
                     </div>
                   )}
                   <div>
@@ -311,7 +344,7 @@ const DonationModal = ({ isOpen, onClose }: DonationModalProps) => {
                   </button>
                   <button
                     onClick={handleDonate}
-                    disabled={!amount || parseInt(amount) < 1 || !user || isProcessing}
+                    disabled={!amount || parseInt(amount) < 1 || (!user && (!guestName || !guestEmail)) || isProcessing}
                     className="flex-1 py-2 sm:py-3 px-3 sm:px-4 rounded-lg bg-gradient-to-r from-accent to-primary text-white font-medium hover:from-accent-dark hover:to-primary-dark transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm sm:text-base"
                   >
                     {isProcessing ? (
