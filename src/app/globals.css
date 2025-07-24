@@ -107,4 +107,24 @@ body {
   .nav-link.active {
     @apply text-text-primary font-medium;
   }
+
+  /* Running Text Animation */
+  @keyframes runningText {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-running-text {
+    animation-name: runningText;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .animation-paused {
+    animation-play-state: paused;
+  }
 }

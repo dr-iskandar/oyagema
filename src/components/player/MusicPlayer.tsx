@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiPlay, FiPause, FiSkipBack, FiSkipForward, FiRepeat, FiShuffle, FiVolume2, FiMusic } from 'react-icons/fi';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
+import RunningText from '@/components/ui/RunningText';
 // Removed favorites functionality
 
 const MusicPlayer = () => {
@@ -117,7 +118,11 @@ const MusicPlayer = () => {
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-text-primary font-semibold truncate text-lg">{currentTrack.title}</h4>
+                  <RunningText 
+                    text={currentTrack.title} 
+                    className="text-text-primary font-semibold text-lg"
+                    speed={30}
+                  />
                   <p className="text-text-secondary text-sm truncate">{currentTrack.artist}</p>
                 </div>
                 {/* Favorite button removed */}
@@ -266,7 +271,11 @@ const MusicPlayer = () => {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-text-primary font-medium truncate">{currentTrack.title}</h4>
+                    <RunningText 
+                      text={currentTrack.title} 
+                      className="text-text-primary font-medium"
+                      speed={25}
+                    />
                     <p className="text-text-secondary text-xs truncate">{currentTrack.artist}</p>
                   </div>
                 </div>
