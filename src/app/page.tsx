@@ -1,6 +1,6 @@
 'use client';
 
-import MainLayout from '@/components/layout/MainLayout';
+import GuestLayout from '@/components/layout/GuestLayout';
 import DailyRecommendation from '@/components/sections/DailyRecommendation';
 import TrackGrid from '@/components/sections/TrackGrid';
 import CategoryGrid from '@/components/sections/CategoryGrid';
@@ -78,18 +78,18 @@ export default function Home() {
   // Show loading state
   if (categoriesLoading || tracksLoading) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex items-center justify-center h-[calc(100vh-160px)]">
           <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   // Show error state
   if (categoriesError || tracksError) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex flex-col items-center justify-center h-[calc(100vh-160px)] px-4 text-center">
           <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-3 sm:mb-4">Oops! Something went wrong</h2>
           <p className="text-sm sm:text-base text-text-secondary mb-4 sm:mb-6">
@@ -102,12 +102,12 @@ export default function Home() {
             Try Again
           </button>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <GuestLayout>
       <div className="space-y-6 sm:space-y-7 md:space-y-8 px-2 sm:px-4 md:px-6">
         <DailyRecommendation 
           track={dailyRecommendation}
@@ -137,6 +137,6 @@ export default function Home() {
           onTrackClick={handleTrackClick}
         />
       </div>
-    </MainLayout>
+    </GuestLayout>
   );
 }

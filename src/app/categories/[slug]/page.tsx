@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import { FiPlay, FiClock, FiMusic } from 'react-icons/fi';
-import MainLayout from '@/components/layout/MainLayout';
+import GuestLayout from '@/components/layout/GuestLayout';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 
 type Track = {
@@ -84,26 +84,26 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
 
   if (isLoading) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   if (error || !category) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="bg-red-500/10 text-red-500 border border-red-500/20 p-4 rounded-lg">
           {error || 'Category not found'}
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <GuestLayout>
       <div className="space-y-8">
         {/* Category Header */}
         <div className="relative">
@@ -246,6 +246,6 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </GuestLayout>
   );
 }

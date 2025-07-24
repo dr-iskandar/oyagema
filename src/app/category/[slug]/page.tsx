@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-import MainLayout from '@/components/layout/MainLayout';
+import GuestLayout from '@/components/layout/GuestLayout';
 import TrackGrid from '@/components/sections/TrackGrid';
 import { useCategoryBySlug } from '@/lib/hooks/useCategories';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
@@ -38,18 +38,18 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   // Show loading state
   if (loading) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex items-center justify-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   // Show error state
   if (error || !category) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex flex-col items-center justify-center h-screen">
           <h2 className="text-2xl font-bold text-text-primary mb-4">Oops! Something went wrong</h2>
           <p className="text-text-secondary mb-6">
@@ -62,12 +62,12 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             Go Back
           </button>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <GuestLayout>
       <div className="space-y-8">
         {/* Category Header */}
         <motion.div 
@@ -107,6 +107,6 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           </div>
         )}
       </div>
-    </MainLayout>
+    </GuestLayout>
   );
 }

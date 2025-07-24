@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FiSearch, FiMusic, FiPlay } from 'react-icons/fi';
-import MainLayout from '@/components/layout/MainLayout';
+import GuestLayout from '@/components/layout/GuestLayout';
 
 type Category = {
   id: string;
@@ -95,26 +95,26 @@ export default function TracksPage() {
 
   if (isLoading) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   if (error) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="bg-red-500/10 text-red-500 border border-red-500/20 p-4 rounded-lg">
           {error}
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <GuestLayout>
       <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -241,6 +241,6 @@ export default function TracksPage() {
           </div>
         </div>
       </div>
-    </MainLayout>
+    </GuestLayout>
   );
 }

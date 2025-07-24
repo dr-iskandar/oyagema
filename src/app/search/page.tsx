@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiSearch } from 'react-icons/fi';
-import MainLayout from '@/components/layout/MainLayout';
+import GuestLayout from '@/components/layout/GuestLayout';
 import TrackGrid from '@/components/sections/TrackGrid';
 import CategoryGrid from '@/components/sections/CategoryGrid';
 import { useCategories } from '@/lib/hooks/useCategories';
@@ -135,30 +135,30 @@ export default function Search() {
   // Show loading state
   if ((categoriesLoading || tracksLoading) && !filteredTracks.length && !filteredCategories.length) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex flex-col items-center justify-center h-[70vh]">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mb-4"></div>
           <p className="text-text-secondary">Loading content...</p>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   // Show error state
   if ((categoriesError || tracksError) && !filteredTracks.length && !filteredCategories.length) {
     return (
-      <MainLayout>
+      <GuestLayout>
         <div className="flex flex-col items-center justify-center h-[70vh]">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-semibold text-text-primary mb-2">Something went wrong</h2>
           <p className="text-text-secondary">We couldn&apos;t load the content. Please try again later.</p>
         </div>
-      </MainLayout>
+      </GuestLayout>
     );
   }
 
   return (
-    <MainLayout>
+    <GuestLayout>
       <div className="space-y-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-text-primary mb-6">Search</h1>
@@ -222,6 +222,6 @@ export default function Search() {
           </div>
         )}
       </div>
-    </MainLayout>
+    </GuestLayout>
   );
 }
