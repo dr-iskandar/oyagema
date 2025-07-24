@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiChevronLeft, FiChevronRight, FiMusic, FiHeart, FiHeadphones } from 'react-icons/fi';
 
@@ -116,11 +116,11 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: "spring", duration: 0.5 }}
-          className="bg-gradient-to-br from-background-light to-background w-full max-w-md rounded-2xl shadow-2xl overflow-hidden"
+          className="bg-gradient-to-br from-background-light to-background w-full max-w-md max-h-[90vh] sm:max-h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="relative p-6 pb-0">
+          <div className="relative p-4 sm:p-6 pb-0 flex-shrink-0">
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-background-dark/20 transition-colors"
@@ -153,7 +153,7 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
             </div>
             
             {/* Slide Indicators */}
-            <div className="flex justify-center space-x-2 mb-6">
+            <div className="flex justify-center space-x-2 mb-4 sm:mb-6">
               {slides.map((_, index) => (
                 <div
                   key={index}
@@ -166,7 +166,7 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
           </div>
 
           {/* Slide Content */}
-          <div className="px-6 pb-6">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6 flex-1 overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -177,37 +177,41 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
                 className="text-center"
               >
                 {/* Icon */}
-                <div className="flex justify-center mb-4">
-                  {slides[currentSlide].icon}
+                <div className="flex justify-center mb-3 sm:mb-4">
+                  <div className="text-4xl sm:text-6xl">
+                    {React.cloneElement(slides[currentSlide].icon as React.ReactElement, {
+                      className: "text-4xl sm:text-6xl text-primary"
+                    })}
+                  </div>
                 </div>
 
                 {/* Title */}
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-2">
                   {slides[currentSlide].title}
                 </h2>
 
                 {/* Subtitle */}
                 {slides[currentSlide].subtitle && (
-                  <h3 className="text-xl text-primary mb-4 italic">
+                  <h3 className="text-lg sm:text-xl text-primary mb-3 sm:mb-4 italic">
                     {slides[currentSlide].subtitle}
                   </h3>
                 )}
 
                 {/* Description */}
-                <p className="text-text-secondary mb-6 leading-relaxed">
+                <p className="text-sm sm:text-base text-text-secondary mb-4 sm:mb-6 leading-relaxed">
                   {slides[currentSlide].description}
                 </p>
 
                 {/* Features */}
                 {slides[currentSlide].features && (
-                  <div className="space-y-3 mb-8">
+                  <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-8">
                     {slides[currentSlide].features.map((feature, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="text-left text-text-primary bg-background-dark/20 rounded-lg p-3"
+                        className="text-left text-sm sm:text-base text-text-primary bg-background-dark/20 rounded-lg p-2 sm:p-3"
                       >
                         {feature}
                       </motion.div>
@@ -219,34 +223,36 @@ const WelcomeModal = ({ isOpen, onClose }: WelcomeModalProps) => {
           </div>
 
           {/* Navigation */}
-          <div className="flex justify-between items-center p-6 pt-0">
+          <div className="flex justify-between items-center p-4 sm:p-6 pt-0 flex-shrink-0">
             <button
               onClick={prevSlide}
               disabled={currentSlide === 0}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+              className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base ${
                 currentSlide === 0
                   ? 'text-text-muted cursor-not-allowed'
                   : 'text-text-primary hover:bg-background-dark/20'
               }`}
             >
               <FiChevronLeft size={16} />
-              <span>{content[language].navigation.previous}</span>
+              <span className="hidden sm:inline">{content[language].navigation.previous}</span>
             </button>
 
             {currentSlide === slides.length - 1 ? (
               <button
                 onClick={handleFinish}
-                className="flex items-center space-x-2 px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors text-sm sm:text-base"
               >
                 <FiHeadphones size={16} />
-                <span>{content[language].navigation.startListening}</span>
+                <span className="hidden sm:inline">{content[language].navigation.startListening}</span>
+                <span className="sm:hidden">Mulai</span>
               </button>
             ) : (
               <button
                 onClick={nextSlide}
-                className="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors text-sm sm:text-base"
               >
-                <span>{content[language].navigation.next}</span>
+                <span className="hidden sm:inline">{content[language].navigation.next}</span>
+                <span className="sm:hidden">Next</span>
                 <FiChevronRight size={16} />
               </button>
             )}
