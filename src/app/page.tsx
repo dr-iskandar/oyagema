@@ -6,6 +6,7 @@ import TrackGrid from '@/components/sections/TrackGrid';
 import CategoryGrid from '@/components/sections/CategoryGrid';
 import { useCategories } from '@/lib/hooks/useCategories';
 import { useTracks } from '@/lib/hooks/useTracks';
+import { useDailyRecommendation } from '@/lib/hooks/useDailyRecommendation';
 import { useAudioPlayer } from '@/lib/contexts/AudioPlayerContext';
 
 // Track type that matches TrackGrid component expectations
@@ -18,21 +19,13 @@ type Track = {
   duration?: string;
 };
 
-// Temporary mock data for daily recommendation until we have API endpoint for it
-const dailyRecommendation = {
-  id: 'rec1',
-  title: 'Inner Peace Meditation',
-  artist: 'Luna Rivers',
-  description: 'Start your day with this calming meditation designed to center your mind and open your heart to the possibilities of the day ahead.',
-  coverUrl: '/images/daily-recommendation.svg',
-  audioUrl: '/audio/sample.mp3',
-  duration: '3:05',
-};
+
 
 export default function Home() {
   // Get data from API using custom hooks
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
   const { tracks, loading: tracksLoading, error: tracksError } = useTracks();
+  const { recommendation: dailyRecommendation, loading: dailyLoading, error: dailyError } = useDailyRecommendation();
 
   // Use audio player hook
   const { 
@@ -46,6 +39,8 @@ export default function Home() {
   const popularTracks = tracks?.slice(0, 5) || [];
 
   const handlePlayRecommendation = () => {
+    if (!dailyRecommendation) return;
+    
     console.log('handlePlayRecommendation called');
     const trackToPlay = {
       id: dailyRecommendation.id,
@@ -76,7 +71,7 @@ export default function Home() {
   };
 
   // Show loading state
-  if (categoriesLoading || tracksLoading) {
+  if (categoriesLoading || tracksLoading || dailyLoading) {
     return (
       <GuestLayout>
         <div className="flex items-center justify-center h-[calc(100vh-160px)]">
@@ -109,10 +104,23 @@ export default function Home() {
   return (
     <GuestLayout>
       <div className="space-y-6 sm:space-y-7 md:space-y-8 px-2 sm:px-4 md:px-6">
-        <DailyRecommendation 
-          track={dailyRecommendation}
-          onPlay={handlePlayRecommendation}
-        />
+        {dailyError ? (
+          <div className="relative w-full h-64 sm:h-72 md:h-80 rounded-xl md:rounded-2xl overflow-hidden bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-red-500 mb-2">Failed to load daily recommendation</p>
+              <p className="text-text-secondary text-sm">{dailyError}</p>
+            </div>
+          </div>
+        ) : dailyRecommendation ? (
+          <DailyRecommendation 
+            track={dailyRecommendation}
+            onPlay={handlePlayRecommendation}
+          />
+        ) : (
+          <div className="relative w-full h-64 sm:h-72 md:h-80 rounded-xl md:rounded-2xl overflow-hidden bg-background-light/10 flex items-center justify-center">
+            <p className="text-text-secondary">No daily recommendation available</p>
+          </div>
+        )}
         
         <TrackGrid 
           title="Recently Played"
