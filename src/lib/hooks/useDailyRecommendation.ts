@@ -106,6 +106,27 @@ export const useDailyRecommendation = () => {
 
   useEffect(() => {
     checkAndUpdateRecommendation();
+
+    // Check daily recommendation when app comes back to focus
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkAndUpdateRecommendation();
+      }
+    };
+
+    const handleFocus = () => {
+      checkAndUpdateRecommendation();
+    };
+
+    // Add event listeners for app focus/visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    // Cleanup event listeners
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   return {
